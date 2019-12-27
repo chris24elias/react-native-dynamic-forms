@@ -9,12 +9,22 @@ interface ToggleFieldProps {
   title: string;
 }
 
-const ToggleField = ({value, setValue, title}: ToggleFieldProps) => {
+const ToggleField = ({
+  value,
+  setValue,
+  title,
+  ...otherProps
+}: ToggleFieldProps) => {
   return (
     <View style={styles.fieldContainer}>
-      <Toggle text={title} checked={value} onChange={setValue} />
+      <Toggle
+        text={title}
+        checked={value}
+        onChange={setValue}
+        {...otherProps}
+      />
     </View>
   );
 };
 
-export default ToggleField;
+export default React.memo(ToggleField);

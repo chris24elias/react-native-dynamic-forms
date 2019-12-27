@@ -1,7 +1,10 @@
 import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
   fieldContainer: {
-    marginBottom: 10,
+    marginBottom: 15,
+  },
+  radio: {
+    marginVertical: 8,
   },
 });
 

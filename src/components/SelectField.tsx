@@ -3,15 +3,27 @@ import {Select} from '@ui-kitten/components';
 import styles from '../constants/styles';
 import {View} from 'react-native';
 
-const SelectField = ({data, value, setValue, title, placeholder, error}) => {
+const SelectField = ({
+  data,
+  value,
+  setValue,
+  title,
+  placeholder,
+  error,
+  multiSelect,
+  ...otherProps
+}) => {
   return (
     <View style={styles.fieldContainer}>
       <Select
         data={data}
         selectedOption={value}
         onSelect={val => {
-          // setValue
-          setValue(val.text);
+          if (multiSelect) {
+            setValue(val);
+          } else {
+            setValue(val.text);
+          }
         }}
         placeholder={placeholder}
         style={{marginBottom: 10}}
@@ -20,9 +32,11 @@ const SelectField = ({data, value, setValue, title, placeholder, error}) => {
         // caption={error}
         // ref={getRef}
         // onSubmitEditing={onSubmitEditing}
+        multiSelect={multiSelect}
+        {...otherProps}
       />
     </View>
   );
 };
 
-export default SelectField;
+export default React.memo(SelectField);

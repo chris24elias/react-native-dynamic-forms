@@ -14,9 +14,16 @@ interface CheckboxFieldProps {
   value: boolean;
   setValue: any;
   title: string;
+  error: any;
 }
 
-const CheckboxField = ({value, setValue, title}: CheckboxFieldProps) => {
+const CheckboxField = ({
+  value,
+  setValue,
+  title,
+  error,
+  ...otherProps
+}: CheckboxFieldProps) => {
   return (
     <View style={styles.fieldContainer}>
       <CheckBox
@@ -25,9 +32,18 @@ const CheckboxField = ({value, setValue, title}: CheckboxFieldProps) => {
         onChange={isChecked => {
           setValue(isChecked);
         }}
+        status={error ? 'danger' : 'basic'}
+        {...otherProps}
       />
+      <Text
+        appearance="hint"
+        category="label"
+        status={error ? 'danger' : 'basic'}
+        style={{marginTop: 5}}>
+        {error}
+      </Text>
     </View>
   );
 };
 
-export default CheckboxField;
+export default React.memo(CheckboxField);

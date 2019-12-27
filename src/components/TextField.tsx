@@ -1,6 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
-import {Input} from '@ui-kitten/components';
+import {Input, Icon} from '@ui-kitten/components';
 import styles from '../constants/styles';
 
 const TextField = ({
@@ -13,7 +13,19 @@ const TextField = ({
   onSubmitEditing,
   textFieldIndex,
   returnKeyLabel,
+  secure,
+  ...otherProps
 }) => {
+  const [secureTextEntry, setSecureTextEntry] = React.useState(secure);
+
+  const renderIcon = style => (
+    <Icon {...style} name={secureTextEntry ? 'eye-off' : 'eye'} />
+  );
+
+  const onIconPress = () => {
+    setSecureTextEntry(!secureTextEntry);
+  };
+
   return (
     <View style={styles.fieldContainer}>
       <Input
@@ -28,9 +40,13 @@ const TextField = ({
         onSubmitEditing={() => onSubmitEditing(textFieldIndex)}
         // returnKeyLabel={""}
         returnKeyType={returnKeyLabel == 'Next' ? 'next' : 'default'}
+        secureTextEntry={secureTextEntry}
+        icon={secure ? renderIcon : null}
+        onIconPress={onIconPress}
+        {...otherProps}
       />
     </View>
   );
 };
 
-export default TextField;
+export default React.memo(TextField);

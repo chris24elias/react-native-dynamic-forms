@@ -19,17 +19,26 @@ import CheckboxField from './components/CheckboxField';
 import TextField from './components/TextField';
 import SelectField from './components/SelectField';
 import ToggleField from './components/ToggleField';
+import RadioField from './components/RadioField';
+import DatePickerField from './components/DatePickerField';
 
 interface Option {
   text: string;
 }
 
 export interface Field {
-  type: 'textField' | 'selectField' | 'checkboxField' | 'toggleField';
-  placeholder: string;
+  type:
+    | 'textField'
+    | 'selectField'
+    | 'checkboxField'
+    | 'toggleField'
+    | 'radioField'
+    | 'datePickerField';
+  placeholder?: string;
   title: string;
   initialValue: any;
   options?: Option[];
+  secure?: boolean;
 }
 
 interface DynamicFormProps {
@@ -41,7 +50,7 @@ const DynamicForm = ({form, schema}: DynamicFormProps) => {
   const [loading, setLoading] = useState(false);
 
   const refs = [];
-  const textFieldKeys = [];
+  let textFieldKeys = [];
 
   function renderFields(props: FormikProps<any>) {
     const {values, handleChange, errors, handleSubmit, setFieldValue} = props;
@@ -51,13 +60,22 @@ const DynamicForm = ({form, schema}: DynamicFormProps) => {
     }
 
     let textFieldCount = 0;
+    textFieldKeys = [];
     let fields = Object.keys(form);
     return fields.map((key, index) => {
       const field = form[key];
       const name = key;
-      const {type, placeholder, title, options} = field;
+      const {
+        type,
+        placeholder,
+        title,
+        options,
+        initialValue,
+        ...otherProps
+      } = field;
 
       const sharedFieldProps = {
+        ...otherProps,
         key: index,
         value: values[name],
         error: errors[name],
@@ -93,12 +111,20 @@ const DynamicForm = ({form, schema}: DynamicFormProps) => {
         return <SelectField {...sharedFieldProps} />;
       }
 
+      if (type == 'radioField') {
+        return <RadioField {...sharedFieldProps} />;
+      }
+
       if (type == 'checkboxField') {
         return <CheckboxField {...sharedFieldProps} />;
       }
 
       if (type == 'toggleField') {
         return <ToggleField {...sharedFieldProps} />;
+      }
+
+      if (type == 'datePickerField') {
+        return <DatePickerField {...sharedFieldProps} />;
       }
     });
   }
