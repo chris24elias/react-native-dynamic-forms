@@ -28,8 +28,8 @@ const App = ({}) => {
     >
       <IconRegistry icons={EvaIconsPack} />
       <SafeAreaProvider>
-        <Login />
-        {/* <ProfileForm /> */}
+        {/* <Login /> */}
+        <ProfileForm />
         {/* <ShowCase /> */}
       </SafeAreaProvider>
     </ApplicationProvider>

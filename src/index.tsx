@@ -21,6 +21,8 @@ import SelectField from './components/SelectField';
 import ToggleField from './components/ToggleField';
 import RadioField from './components/RadioField';
 import DatePickerField from './components/DatePickerField';
+import ChooseAvatar from './components/ChooseAvatar';
+import TagsInputField from './components/TagsInputField';
 
 interface Option {
   text: string;
@@ -33,7 +35,9 @@ export interface Field {
     | 'checkboxField'
     | 'toggleField'
     | 'radioField'
-    | 'datePickerField';
+    | 'datePickerField'
+    | 'avatarField'
+    | 'tagsInputField';
   placeholder?: string;
   title: string;
   initialValue: any;
@@ -107,6 +111,7 @@ const DynamicForm = ({form, schema}: DynamicFormProps) => {
         );
       }
 
+      // @TODO FIX MULTISELECT
       if (type == 'selectField') {
         return <SelectField {...sharedFieldProps} />;
       }
@@ -125,6 +130,14 @@ const DynamicForm = ({form, schema}: DynamicFormProps) => {
 
       if (type == 'datePickerField') {
         return <DatePickerField {...sharedFieldProps} />;
+      }
+
+      if (type == 'avatarField') {
+        return <ChooseAvatar {...sharedFieldProps} />;
+      }
+
+      if (type == 'tagsInputField') {
+        return <TagsInputField {...sharedFieldProps} />;
       }
     });
   }
@@ -156,7 +169,7 @@ const DynamicForm = ({form, schema}: DynamicFormProps) => {
           initialValues={initialValues}
           onSubmit={onsubmit}>
           {props => {
-            // console.log('REFS', refs, props);
+            console.log('VALUES', props.values);
             if (props.errors && Object.keys(props.errors).length) {
               console.log('ERRORs', props.errors);
             }

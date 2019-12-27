@@ -5,6 +5,13 @@ import * as yup from 'yup';
 interface ProfileFormProps {}
 
 const profileForm: {[x: string]: Field} = {
+  profilePhoto: {
+    type: 'avatarField',
+    title: 'First Name',
+    initialValue: 'https://picsum.photos/600',
+    size: {height: 200, width: 400},
+    posititon: 'center',
+  },
   firstName: {
     type: 'textField',
     placeholder: 'first name',
@@ -30,17 +37,11 @@ const profileForm: {[x: string]: Field} = {
     options: [{text: 'Male'}, {text: 'Female'}],
     placeholder: 'gender',
   },
-  lastName2: {
-    type: 'textField',
-    placeholder: 'last name',
-    title: 'Last Name',
-    initialValue: '',
-  },
-  lastName3: {
-    type: 'textField',
-    placeholder: 'last name',
-    title: 'Last Name',
-    initialValue: '',
+  tags: {
+    type: 'tagsInputField',
+    placeholder: 'add tags separated by commas...',
+    title: 'Tags',
+    initialValue: [],
   },
 };
 
