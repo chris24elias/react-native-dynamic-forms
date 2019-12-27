@@ -2965,10 +2965,10 @@ form-data@~2.3.2:
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
 
-formik@^2.0.8:
-  version "2.0.8"
-  resolved "https://registry.yarnpkg.com/formik/-/formik-2.0.8.tgz#a17740007a9a1394360142c128bb686acb5dbc7c"
-  integrity sha512-PxC9G6EvLdJzMv7z+bsvpI/Euplv2vVgTQebD5yNza4t3fiMBB+iD90VOVTLCyH5Pnv3bljsZiKsIqGp/UNKKg==
+formik@2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/formik/-/formik-2.0.6.tgz#e22e3452399a69ad057ba9828ba8fb0d2319df53"
+  integrity sha512-x2fC80v8AIrGgpxWrLqKaK9hdV8WX4OSLK+Fr5lclqExA59NCuxdB3WiuxJQc9/g043BmfTIuaILrV9Wq0MPVw==
   dependencies:
     deepmerge "^2.1.1"
     hoist-non-react-statics "^3.3.0"
@@ -5507,6 +5507,11 @@ react-native-safe-area-view@^1.0.0:
   integrity sha512-cJOBfM6t7HL3NQf3QTVKO6BU7esCCMbKJjpNy9L2nT724UzZ2y6E3ol/3QWsw7ySegWlF857+RIkRLsnpltFVg==
   dependencies:
     hoist-non-react-statics "^2.3.1"
+
+react-native-sectioned-multi-select@^0.7.6:
+  version "0.7.6"
+  resolved "https://registry.yarnpkg.com/react-native-sectioned-multi-select/-/react-native-sectioned-multi-select-0.7.6.tgz#d45f067a29b0200a481812b6a255a996adeb3897"
+  integrity sha512-XO4cxYN6s1Dfi28GI3aIruZbNWkS02S7GB99A1biu6BQlZWvvKAnnglhlvhqElkLyIhMMfLCsAf4e5pWBfWOqA==
 
 react-native-status-bar-height@^2.2.0:
   version "2.4.0"

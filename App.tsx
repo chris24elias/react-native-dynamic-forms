@@ -7,17 +7,17 @@ import {
   Text,
   IconRegistry,
 } from '@ui-kitten/components';
-import {mapping, light as lightTheme, dark} from '@eva-design/eva';
+import {mapping, light, dark} from '@eva-design/eva';
 import * as yup from 'yup';
-import Login from './examples/ Login';
+import Login from './src/examples/ Login';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import {default as customMapping} from './custom-mapping.json';
-import ProfileForm from './examples/ProfileForm';
+import ProfileForm from './src/examples/ProfileForm';
 
 import {default as appTheme} from './custom-theme.json';
-import ShowCase from './examples/Showcase';
+import ShowCase from './src/examples/Showcase';
 
-const theme = {...lightTheme, ...appTheme};
+const theme = {...light, ...appTheme};
 
 const App = ({}) => {
   return (

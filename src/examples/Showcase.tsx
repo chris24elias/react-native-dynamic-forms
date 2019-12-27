@@ -1,5 +1,5 @@
 import React from 'react';
-import DynamicForm, {Field} from '../src';
+import DynamicForm, {Field} from '..';
 import * as yup from 'yup';
 
 interface ShowCaseProps {}

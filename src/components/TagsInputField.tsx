@@ -3,7 +3,6 @@ import {View, TouchableOpacity, Image} from 'react-native';
 import {Input, Icon, Text} from '@ui-kitten/components';
 import styles from '../constants/styles';
 import {FieldComponentProps} from '../constants/interfaces';
-// import { Item, Input, Label, Button, Icon } from "native-base";
 
 interface TagsInputFieldProps extends FieldComponentProps {
   value: string[];
@@ -16,28 +15,14 @@ const TagsInputField = ({
   value,
   placeholder,
 }: TagsInputFieldProps) => {
-  // const [hashtags, setHashTags] = useState([]);
   const [inputText, setInputText] = useState('');
-
-  // useEffect(() => {
-  //   // parse the tags and create hashtags
-  //   let newTags = [];
-  //   if (tags) {
-  //     let fields = tags.split(' ');
-  //     fields.forEach(t => {
-  //       newTags.push(t);
-  //     });
-  //   }
-
-  //   setHashTags(newTags);
-  // }, [tags]);
 
   function removeTag(index) {
     let tagsCopy = value.slice(0);
     // let index = tagsCopy.indexOf(tag);
     tagsCopy.splice(index, 1);
     console.log('REMOVED TAG index', index, tagsCopy);
-    setValue(tagsCopy);
+    setValue(tagsCopy, false);
   }
 
   function addTag(text) {
@@ -49,7 +34,7 @@ const TagsInputField = ({
         .trim(),
     ];
     setInputText('');
-    setValue(newArr);
+    setValue(newArr, false);
   }
 
   function renderTags() {
@@ -59,45 +44,14 @@ const TagsInputField = ({
 
     return value.map((tag, index) => {
       return (
-        <View
-          key={index}
-          style={{
-            height: 50,
-            marginRight: 10,
-            flexDirection: 'row',
-            // borderWidth: 1,
-            // borderColor: color.deepLavender,
-
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <View
-            style={{
-              backgroundColor: '#EFDEF9',
-              padding: 7,
-              borderRadius: 4,
-            }}>
-            <Text
-              style={{
-                fontSize: 17,
-                lineHeight: 18,
-                top: 1.5,
-                // color: color.deepLavender,
-                marginRight: 2,
-              }}>
-              {tag}
-            </Text>
+        <View key={index} style={styles.tagContainer}>
+          <View style={styles.tag}>
+            <Text style={styles.tagText}>{tag}</Text>
           </View>
 
           <TouchableOpacity
             onPress={() => removeTag(index)}
-            style={{
-              top: '0%',
-              right: '-10%',
-              position: 'absolute',
-            }}>
-            {/* <Image source={require("../../assets/purple-close.png")} style={{ height: 17, width: 17 }} />
-             */}
+            style={styles.tagCloseIcon}>
             <Icon name={'close-circle-outline'} width={17} height={17} />
           </TouchableOpacity>
         </View>
@@ -132,15 +86,7 @@ const TagsInputField = ({
         }}
         autoCorrect={false}
       />
-      <View
-        style={{
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          flex: 0,
-          alignItems: 'center',
-        }}>
-        {renderTags()}
-      </View>
+      <View style={styles.tagsContainer}>{renderTags()}</View>
     </View>
   );
 };

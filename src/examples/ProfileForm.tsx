@@ -1,5 +1,5 @@
 import React from 'react';
-import DynamicForm, {Field} from '../src';
+import DynamicForm, {Field} from '..';
 import * as yup from 'yup';
 
 interface ProfileFormProps {}
@@ -9,8 +9,9 @@ const profileForm: {[x: string]: Field} = {
     type: 'avatarField',
     title: 'First Name',
     initialValue: 'https://picsum.photos/600',
-    size: {height: 200, width: 400},
-    posititon: 'center',
+    size: {height: 150, width: 150},
+    position: 'center',
+    rounded: true,
   },
   firstName: {
     type: 'textField',
@@ -28,7 +29,15 @@ const profileForm: {[x: string]: Field} = {
     type: 'textField',
     placeholder: 'email',
     title: 'Email',
-    initialValue: '',
+    initialValue: 'dasda@gmail.com',
+    disabled: true,
+  },
+  country_code: {
+    initialValue: null,
+    title: 'Country Code',
+    type: 'pickerField',
+    options: [{label: 'US', value: 1}],
+    placeholder: 'Select one',
   },
   gender: {
     title: 'Gender',
@@ -52,6 +61,7 @@ const schema = yup.object({
     .string()
     .email()
     .required(),
+  country_code: yup.number().required(),
   // password: yup.string().required(),
   // checkbox: yup.bool().oneOf([true], 'Field must be checked'),
 });

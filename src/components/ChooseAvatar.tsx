@@ -27,6 +27,7 @@ interface ChooseAvatarProps {
   setValue: any;
   title: string;
   size: any;
+  position: 'center';
 }
 
 const ChooseAvatar = ({
@@ -34,6 +35,7 @@ const ChooseAvatar = ({
   setValue,
   title,
   size,
+  position,
   ...otherProps
 }: ChooseAvatarProps) => {
   function onEditPress() {
@@ -57,8 +59,15 @@ const ChooseAvatar = ({
       }
     });
   }
+
+  function getPosition() {
+    if (position == 'center') {
+      return styles.center;
+    }
+  }
+
   return (
-    <View style={styles.fieldContainer}>
+    <View style={[styles.fieldContainer, getPosition()]}>
       {/* <Image
         source={{
           uri: value,

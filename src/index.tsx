@@ -23,6 +23,7 @@ import RadioField from './components/RadioField';
 import DatePickerField from './components/DatePickerField';
 import ChooseAvatar from './components/ChooseAvatar';
 import TagsInputField from './components/TagsInputField';
+import PickerField from './components/PickerField';
 
 interface Option {
   text: string;
@@ -37,7 +38,8 @@ export interface Field {
     | 'radioField'
     | 'datePickerField'
     | 'avatarField'
-    | 'tagsInputField';
+    | 'tagsInputField'
+    | 'pickerField';
   placeholder?: string;
   title: string;
   initialValue: any;
@@ -83,7 +85,9 @@ const DynamicForm = ({form, schema}: DynamicFormProps) => {
         key: index,
         value: values[name],
         error: errors[name],
-        setValue: value => setFieldValue(name, value),
+        setValue: (value, shouldValidate) => {
+          setFieldValue(name, value, shouldValidate);
+        },
         title: title,
         placeholder,
         data: options,
@@ -139,6 +143,21 @@ const DynamicForm = ({form, schema}: DynamicFormProps) => {
       if (type == 'tagsInputField') {
         return <TagsInputField {...sharedFieldProps} />;
       }
+
+      if (type == 'pickerField') {
+        return (
+          <PickerField
+            {...sharedFieldProps}
+            status={
+              sharedFieldProps.error
+                ? 'danger'
+                : sharedFieldProps.value
+                ? 'success'
+                : 'basic'
+            }
+          />
+        );
+      }
     });
   }
 
@@ -151,14 +170,17 @@ const DynamicForm = ({form, schema}: DynamicFormProps) => {
     }, 1500);
   }
 
-  const initialValues = {};
-  Object.keys(form).forEach(key => {
-    if (form[key].type == 'selectField') {
-      initialValues[key] = {text: form[key].initialValue};
-    } else {
-      initialValues[key] = form[key].initialValue;
-    }
-  });
+  function getInitialValues() {
+    const initialValues = {};
+    Object.keys(form).forEach(key => {
+      if (form[key].type == 'selectField') {
+        initialValues[key] = {text: form[key].initialValue};
+      } else {
+        initialValues[key] = form[key].initialValue;
+      }
+    });
+    return initialValues;
+  }
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -166,7 +188,7 @@ const DynamicForm = ({form, schema}: DynamicFormProps) => {
       <Layout style={{flex: 1, padding: 15}}>
         <Formik
           validationSchema={schema}
-          initialValues={initialValues}
+          initialValues={getInitialValues()}
           onSubmit={onsubmit}>
           {props => {
             console.log('VALUES', props.values);
