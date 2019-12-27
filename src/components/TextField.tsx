@@ -34,7 +34,7 @@ const TextField = ({
         onChangeText={text => setValue(text)}
         style={{}}
         label={title}
-        status={error ? 'danger' : 'basic'}
+        status={error ? 'danger' : value ? 'success' : 'basic'}
         caption={error}
         ref={getRef}
         onSubmitEditing={() => onSubmitEditing(textFieldIndex)}

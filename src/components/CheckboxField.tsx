@@ -39,7 +39,14 @@ const CheckboxField = ({
         appearance="hint"
         category="label"
         status={error ? 'danger' : 'basic'}
-        style={{marginTop: 5}}>
+        style={{
+          marginTop: 5,
+          fontWeight: '400',
+          fontSize: 12,
+          lineHeight: 16,
+          color: '#bf0039',
+          fontFamily: 'System',
+        }}>
         {error}
       </Text>
     </View>
