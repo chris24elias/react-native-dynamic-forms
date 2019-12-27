@@ -10,155 +10,100 @@ import {
 } from '@ui-kitten/components';
 // import { SafeAreaView } from "react-navigation";
 import * as yup from 'yup';
-import {Formik} from 'formik';
+import {Formik, FormikProps} from 'formik';
 import {Header} from 'native-base';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import LoadingOverlay from './LoadingOverlay';
+import LoadingOverlay from './components/LoadingOverlay';
 import SafeAreaView from 'react-native-safe-area-view';
 import CheckboxField from './components/CheckboxField';
+import TextField from './components/TextField';
+import SelectField from './components/SelectField';
+import ToggleField from './components/ToggleField';
 
-interface DynamicFormProps {
-  form: any;
+interface Option {
+  text: string;
 }
 
-const MOCK_FORM = {
-  title: 'User',
-  initialValues: {
-    first_name: '',
-    last_name: '',
-    third_field: false,
-    fourth_field: '',
-    fifth_field: '',
-    six_field: '',
-  },
-  schema: yup.object({
-    first_name: yup.string().required(),
-    last_name: yup.string().required(),
-    third_field: yup.boolean().required(),
-    fourth_field: yup.string().required(),
-    fifth_field: yup.string().required(),
-    six_field: yup.string().required(),
-  }),
-  fields: [
-    {
-      name: 'first_name',
-      type: 'textField',
-      placeholder: 'first name',
-      title: 'First Name',
-    },
-    {
-      name: 'last_name',
-      type: 'selectField',
-      placeholder: 'last name',
-      title: 'Last Name',
-      options: [{text: 'Option 1'}, {text: 'Option 2'}, {text: 'Option 3'}],
-    },
-    {
-      name: 'third_field',
-      type: 'checkboxField',
-      placeholder: 'last name',
-      title: 'Last Name',
-    },
-    {
-      name: 'fourth_field',
-      type: 'textField',
-      placeholder: 'last name',
-      title: 'Last Name',
-    },
-    {
-      name: 'last_name',
-      type: 'selectField',
-      placeholder: 'last name',
-      title: 'Last Name',
-      options: [{text: 'Option 1'}, {text: 'Option 2'}, {text: 'Option 3'}],
-    },
-    {
-      name: 'fifth_field',
-      type: 'textField',
-      placeholder: 'last name',
-      title: 'Last Name',
-    },
-    {
-      name: 'six_field',
-      type: 'textField',
-      placeholder: 'last name',
-      title: 'Last Name',
-    },
-  ],
-};
+export interface Field {
+  type: 'textField' | 'selectField' | 'checkboxField' | 'toggleField';
+  placeholder: string;
+  title: string;
+  initialValue: any;
+  options?: Option[];
+}
 
-const DynamicForm = ({}: DynamicFormProps) => {
-  const {schema, initialValues, fields} = MOCK_FORM;
+interface DynamicFormProps {
+  form: {[x: string]: Field};
+  schema: any;
+}
+
+const DynamicForm = ({form, schema}: DynamicFormProps) => {
   const [loading, setLoading] = useState(false);
 
   const refs = [];
   const textFieldKeys = [];
 
-  // fields.forEach(() => {
-  //   refs.push(useRef(null));
-  // });
+  function renderFields(props: FormikProps<any>) {
+    const {values, handleChange, errors, handleSubmit, setFieldValue} = props;
 
-  function renderFields(values, handleChange, errors, onSubmit) {
-    if (fields && fields.length > 0) {
-      let textFieldCount = 0;
-
-      return fields.map((field, index) => {
-        const {type, placeholder, title, name, options} = field;
-
-        if (type == 'textField') {
-          textFieldKeys.push(index);
-          textFieldCount++;
-          return (
-            <TextField
-              key={index}
-              textFieldIndex={textFieldCount}
-              label={title}
-              value={values[name]}
-              setValue={handleChange(name)}
-              placeholder={placeholder}
-              error={errors[name]}
-              getRef={ref => (refs[index] = ref)}
-              returnKeyLabel={index == fields.length - 1 ? 'Submit' : 'Next'}
-              onSubmitEditing={key => {
-                if (index < fields.length - 1) {
-                  refs[textFieldKeys[key]].focus();
-                } else {
-                  onSubmit();
-                }
-              }}
-            />
-          );
-        }
-
-        if (type == 'selectField') {
-          return (
-            <SelectField
-              key={index}
-              label={title}
-              value={values[name]}
-              setValue={handleChange(name)}
-              placeholder={placeholder}
-              error={errors[name]}
-              // getRef={ref => (refs[index] = ref)}
-              data={options}
-            />
-          );
-        }
-
-        if (type == 'checkboxField') {
-          return (
-            <CheckboxField
-              key={index}
-              checked={values[name]}
-              onCheckedChange={handleChange(name)}
-            />
-          );
-        }
-      });
+    if (!form) {
+      return null;
     }
+
+    let textFieldCount = 0;
+    let fields = Object.keys(form);
+    return fields.map((key, index) => {
+      const field = form[key];
+      const name = key;
+      const {type, placeholder, title, options} = field;
+
+      const sharedFieldProps = {
+        key: index,
+        value: values[name],
+        error: errors[name],
+        setValue: value => setFieldValue(name, value),
+        title: title,
+        placeholder,
+        data: options,
+      };
+
+      if (type == 'textField') {
+        textFieldKeys.push(index);
+        textFieldCount++;
+        return (
+          <TextField
+            textFieldIndex={textFieldCount}
+            getRef={ref => (refs[index] = ref)}
+            returnKeyLabel={index == fields.length - 1 ? 'Submit' : 'Next'}
+            onSubmitEditing={keyIndex => {
+              if (index < fields.length - 1) {
+                if (refs[textFieldKeys[keyIndex]]) {
+                  refs[textFieldKeys[keyIndex]].focus();
+                }
+              } else {
+                handleSubmit();
+              }
+            }}
+            {...sharedFieldProps}
+          />
+        );
+      }
+
+      if (type == 'selectField') {
+        return <SelectField {...sharedFieldProps} />;
+      }
+
+      if (type == 'checkboxField') {
+        return <CheckboxField {...sharedFieldProps} />;
+      }
+
+      if (type == 'toggleField') {
+        return <ToggleField {...sharedFieldProps} />;
+      }
+    });
   }
 
-  function handleSubmit(values) {
+  function onsubmit(values) {
     console.log('SUBMITTING', values);
 
     setLoading(true);
@@ -167,28 +112,38 @@ const DynamicForm = ({}: DynamicFormProps) => {
     }, 1500);
   }
 
+  const initialValues = {};
+  Object.keys(form).forEach(key => {
+    if (form[key].type == 'selectField') {
+      initialValues[key] = {text: form[key].initialValue};
+    } else {
+      initialValues[key] = form[key].initialValue;
+    }
+  });
+
   return (
     <SafeAreaView style={{flex: 1}}>
-      {/* <Header /> */}
       <LoadingOverlay visible={loading} />
       <Layout style={{flex: 1, padding: 15}}>
         <Formik
           validationSchema={schema}
           initialValues={initialValues}
-          onSubmit={handleSubmit}>
+          onSubmit={onsubmit}>
           {props => {
-            console.log('REFS', refs);
+            // console.log('REFS', refs, props);
+            if (props.errors && Object.keys(props.errors).length) {
+              console.log('ERRORs', props.errors);
+            }
             return (
               <View style={{flex: 1}}>
                 <KeyboardAwareScrollView>
-                  {renderFields(
-                    props.values,
-                    props.handleChange,
-                    props.errors,
-                    props.handleSubmit,
-                  )}
+                  {renderFields(props)}
                 </KeyboardAwareScrollView>
-                <Button disabled={!props.isValid}>Submit</Button>
+                <Button
+                  disabled={!props.isValid}
+                  onPress={() => props.handleSubmit()}>
+                  Submit
+                </Button>
               </View>
             );
           }}
@@ -201,52 +156,3 @@ const DynamicForm = ({}: DynamicFormProps) => {
 const styles = StyleSheet.create({});
 
 export default DynamicForm;
-
-const TextField = ({
-  value,
-  setValue,
-  label,
-  placeholder,
-  error,
-  getRef,
-  onSubmitEditing,
-  textFieldIndex,
-  returnKeyLabel,
-}) => {
-  return (
-    <Input
-      placeholder={placeholder}
-      value={value}
-      onChangeText={text => setValue(text)}
-      style={{marginBottom: 10}}
-      label={label}
-      status={error ? 'danger' : 'basic'}
-      caption={error}
-      ref={getRef}
-      onSubmitEditing={() => onSubmitEditing(textFieldIndex)}
-      // returnKeyLabel={""}
-      returnKeyType={returnKeyLabel == 'Next' ? 'next' : 'default'}
-    />
-  );
-};
-
-const SelectField = ({data, value, setValue, label, placeholder, error}) => {
-  return (
-    <Select
-      data={data}
-      selectedOption={value}
-      onSelect={val => {
-        console.log('VALUE SELECTED', val);
-        // setValue
-        setValue(val.text);
-      }}
-      placeholder={placeholder}
-      style={{marginBottom: 10}}
-      label={label}
-      status={error ? 'danger' : 'basic'}
-      // caption={error}
-      // ref={getRef}
-      // onSubmitEditing={onSubmitEditing}
-    />
-  );
-};

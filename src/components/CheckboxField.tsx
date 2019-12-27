@@ -7,22 +7,26 @@ import {
   Text,
   CheckBox,
 } from '@ui-kitten/components';
+import {View} from 'react-native';
+import styles from '../constants/styles';
 
 interface CheckboxFieldProps {
-  checked: boolean;
-  onCheckedChange: any;
+  value: boolean;
+  setValue: any;
+  title: string;
 }
 
-const CheckboxField = ({checked, onCheckedChange}: CheckboxFieldProps) => {
+const CheckboxField = ({value, setValue, title}: CheckboxFieldProps) => {
   return (
-    <CheckBox
-      text={`Checked: ${checked}`}
-      checked={checked}
-      onChange={isChecked => {
-        console.log('is chcked', isChecked);
-        onCheckedChange(isChecked);
-      }}
-    />
+    <View style={styles.fieldContainer}>
+      <CheckBox
+        text={title}
+        checked={value}
+        onChange={isChecked => {
+          setValue(isChecked);
+        }}
+      />
+    </View>
   );
 };
 

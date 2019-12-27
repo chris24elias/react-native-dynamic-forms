@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
-import {SCREEN_HEIGHT, SCREEN_WIDTH} from './constants';
+import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../constants';
 
 interface LoadingOverlayProps {
   visible: boolean;
