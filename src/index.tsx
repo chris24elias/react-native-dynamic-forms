@@ -54,9 +54,14 @@ export interface Field {
 interface DynamicFormProps {
   form: {[x: string]: Field};
   schema: any;
+  showErrorSummary?: boolean;
 }
 
-const DynamicForm = ({form, schema}: DynamicFormProps) => {
+const DynamicForm = ({
+  form,
+  schema,
+  showErrorSummary = true,
+}: DynamicFormProps) => {
   const [loading, setLoading] = useState(false);
 
   const refs = [];
@@ -186,6 +191,41 @@ const DynamicForm = ({form, schema}: DynamicFormProps) => {
     });
   }
 
+  function renderErrors(errors) {
+    if (!showErrorSummary) {
+      return null;
+    }
+    if (errors && Object.keys(errors).length) {
+      let x = Object.keys(errors).map((key, index) => {
+        const error = errors[key];
+        return (
+          <Text
+            key={index}
+            style={{marginBottom: 5}}
+            category="c2"
+            status={'warning'}>
+            {error}
+          </Text>
+        );
+      });
+
+      return (
+        <View
+          style={{
+            backgroundColor: '#ffeaa780',
+            padding: 10,
+            borderRadius: 8,
+          }}>
+          <Text style={{marginBottom: 10}} category="s1" status={'warning'}>
+            Please address the following
+          </Text>
+          <View style={{paddingLeft: 5}}>{x}</View>
+        </View>
+      );
+    }
+    return null;
+  }
+
   function onsubmit(values) {
     console.log('SUBMITTING', values);
 
@@ -223,9 +263,10 @@ const DynamicForm = ({form, schema}: DynamicFormProps) => {
             return (
               <View style={{flex: 1}}>
                 <KeyboardAwareScrollView
-                // extraHeight={0}
-                // enableAutomaticScroll={false}
-                // enableResetScrollToCoords={false}
+                  showsVerticalScrollIndicator={false}
+                  // extraHeight={0}
+                  // enableAutomaticScroll={false}
+                  // enableResetScrollToCoords={false}
                 >
                   {renderFields(props)}
                   {/* <Button
@@ -233,6 +274,7 @@ const DynamicForm = ({form, schema}: DynamicFormProps) => {
                     onPress={() => props.handleSubmit()}>
                     Submit
                   </Button> */}
+                  {renderErrors(props.errors)}
                 </KeyboardAwareScrollView>
               </View>
             );

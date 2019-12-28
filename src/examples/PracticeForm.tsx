@@ -109,11 +109,14 @@ const practice_form: {[x: string]: Field} = {
 
 const schema = yup.object({
   //   firstName: yup.string().required(),
-  //   lastName: yup.string().required(),
-  //   email: yup
-  //     .string()
-  //     .email()
-  //     .required(),
+  practice_name: yup.string().required(),
+  description: yup.string().required(),
+  npi: yup.string().required(),
+  insurances: yup.string().required(),
+  email: yup
+    .string()
+    .email()
+    .required(),
   // country_code: yup.number().required(),
   // password: yup.string().required(),
   // checkbox: yup.bool().oneOf([true], 'Field must be checked'),
