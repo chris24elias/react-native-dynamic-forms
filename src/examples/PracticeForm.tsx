@@ -92,18 +92,18 @@ const practice_form: {[x: string]: Field} = {
     initialValue: '',
     keyboardType: 'number-pad',
   },
+  tags: {
+    type: 'tagsInputField',
+    placeholder: 'add tags separated by commas...',
+    title: 'Tags',
+    initialValue: [],
+  },
   description: {
     type: 'textField',
     placeholder: 'description',
     title: 'Describe your practice (optional)',
     initialValue: '',
     multiline: true,
-  },
-  tags: {
-    type: 'tagsInputField',
-    placeholder: 'add tags separated by commas...',
-    title: 'Tags',
-    initialValue: [],
   },
 };
 

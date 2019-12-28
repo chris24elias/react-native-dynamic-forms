@@ -26,6 +26,7 @@ import TagsInputField from './components/TagsInputField';
 import PickerField from './components/PickerField';
 import MultiSelectPickerField from './components/MultiSelectPickerField';
 import AutoCompleteAddressField from './components/AutoCompleteAddressField';
+import styles from './constants/styles';
 
 interface Option {
   text: string;
@@ -204,7 +205,7 @@ const DynamicForm = ({
             style={{marginBottom: 5}}
             category="c2"
             status={'warning'}>
-            {error}
+            • {error}
           </Text>
         );
       });
@@ -215,8 +216,9 @@ const DynamicForm = ({
             backgroundColor: '#ffeaa780',
             padding: 10,
             borderRadius: 8,
+            ...styles.fieldContainer,
           }}>
-          <Text style={{marginBottom: 10}} category="s1" status={'warning'}>
+          <Text style={{marginBottom: 7}} category="s1" status={'warning'}>
             Please address the following
           </Text>
           <View style={{paddingLeft: 5}}>{x}</View>
@@ -269,12 +271,14 @@ const DynamicForm = ({
                   // enableResetScrollToCoords={false}
                 >
                   {renderFields(props)}
-                  {/* <Button
+
+                  {renderErrors(props.errors)}
+                  <Button
+                    style={{marginTop: 5}}
                     disabled={!props.isValid}
                     onPress={() => props.handleSubmit()}>
                     Submit
-                  </Button> */}
-                  {renderErrors(props.errors)}
+                  </Button>
                 </KeyboardAwareScrollView>
               </View>
             );
@@ -284,7 +288,5 @@ const DynamicForm = ({
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default DynamicForm;
