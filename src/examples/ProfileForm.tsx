@@ -1,6 +1,9 @@
 import React from 'react';
 import DynamicForm, {Field} from '..';
 import * as yup from 'yup';
+import {Icon, TopNavigationAction, TopNavigation} from '@ui-kitten/components';
+import {View} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 interface ProfileFormProps {}
 
@@ -32,25 +35,95 @@ const profileForm: {[x: string]: Field} = {
     initialValue: 'dasda@gmail.com',
     disabled: true,
   },
-  country_code: {
-    initialValue: null,
-    title: 'Country Code',
-    type: 'pickerField',
-    options: [{label: 'US', value: 1}],
-    placeholder: 'Select one',
+  phone: {
+    type: 'textField',
+    placeholder: 'phone',
+    title: 'Phone',
+    initialValue: '',
+    keyboardType: 'number-pad',
+  },
+  about: {
+    type: 'textField',
+    placeholder: 'about',
+    title: 'About',
+    initialValue: '',
+    multiline: true,
+  },
+  specialties: {
+    type: 'multiSelectPickerField',
+    initialValue: [],
+    title: 'Specialties',
+    options: [
+      {name: 'US', value: 1},
+      {name: 'Canada', value: 2},
+    ],
+  },
+  practice_names: {
+    type: 'textField',
+    placeholder: 'practice names',
+    title: 'Practice names',
+    initialValue: '',
+    disabled: true,
+  },
+  board_certificates: {
+    type: 'textField',
+    placeholder: 'board certifications',
+    title: 'Board Certifications',
+    initialValue: '',
+  },
+  education: {
+    type: 'textField',
+    placeholder: 'education and training',
+    title: 'Education and Training',
+    initialValue: '',
+  },
+  awards: {
+    type: 'textField',
+    placeholder: 'awards',
+    title: 'Awards',
+    initialValue: '',
+  },
+  // country_code: {
+  //   initialValue: 0,
+  //   title: 'Country Code',
+  //   type: 'pickerField',
+  //   options: [{label: 'US', value: 1}],
+  //   placeholder: 'Select one',
+  // },
+  language_list: {
+    type: 'multiSelectPickerField',
+    initialValue: [],
+    title: 'Languages',
+    options: [
+      {name: 'US', value: 1},
+      {name: 'Canada', value: 2},
+    ],
   },
   gender: {
     title: 'Gender',
     initialValue: 'Male',
-    type: 'radioField',
+    type: 'selectField',
     options: [{text: 'Male'}, {text: 'Female'}],
     placeholder: 'gender',
+  },
+  npi: {
+    type: 'textField',
+    placeholder: 'npi',
+    title: 'NPI',
+    initialValue: '',
+    keyboardType: 'number-pad',
   },
   tags: {
     type: 'tagsInputField',
     placeholder: 'add tags separated by commas...',
     title: 'Tags',
     initialValue: [],
+  },
+  accepting: {
+    type: 'checkboxField',
+    placeholder: '',
+    title: 'Accepting new patients',
+    initialValue: false,
   },
 };
 
@@ -61,13 +134,24 @@ const schema = yup.object({
     .string()
     .email()
     .required(),
-  country_code: yup.number().required(),
+  // country_code: yup.number().required(),
   // password: yup.string().required(),
   // checkbox: yup.bool().oneOf([true], 'Field must be checked'),
 });
 
 const ProfileForm = ({}: ProfileFormProps) => {
-  return <DynamicForm form={profileForm} schema={schema} />;
+  const BackIcon = style => <Icon {...style} name="arrow-back" />;
+
+  const BackAction = () => <TopNavigationAction icon={BackIcon} />;
+  return (
+    <SafeAreaView style={{flex: 1}}>
+      <TopNavigation
+        // leftControl={BackAction()}
+        title="Application Title"
+      />
+      <DynamicForm form={profileForm} schema={schema} />
+    </SafeAreaView>
+  );
 };
 
 export default ProfileForm;

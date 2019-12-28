@@ -1,7 +1,6 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef, useEffect, Component} from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   Modal,
   TouchableOpacity,
@@ -9,122 +8,161 @@ import {
 } from 'react-native';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import {Header, Body, Title, Left, Right} from 'native-base';
-import {FieldComponentProps} from '../constants/interfaces';
+import {FieldComponentProps, Option} from '../constants/interfaces';
 import styles from '../constants/styles';
+import {styled, Interaction, Text} from '@ui-kitten/components';
+import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../constants';
+import {normalizeStyle, normalizeTextStyle} from '../constants/functions';
 
-interface MultiSelectPickerFieldProps extends FieldComponentProps {}
+interface MultiSelectPickerFieldProps extends FieldComponentProps {
+  data: Option[];
+  style: any;
+  themedStyle: any;
+}
+class MultiSelectPickerField extends Component<MultiSelectPickerFieldProps> {
+  static styledComponentName = 'Input';
 
-const MultiSelectPickerField = ({
-  error,
-  setValue,
-  title,
-  value,
-  placeholder,
-}: MultiSelectPickerFieldProps) => {
-  //   const [selectedItems, setSelectedItems] = useState([]);
-  const multiSelect = useRef(null);
-  //   const [languages, setLanguages] = useState(null);
+  render() {
+    const {error, setValue, title, value, placeholder, data} = this.props;
+    const {style, themedStyle, ...restProps} = this.props;
+    const {
+      labelMarginBottom,
+      labelFontSize,
+      labelFontWeight,
+      labelLineHeight,
+      labelFontFamily,
+      labelColor,
+      captionMarginTop,
+      captionFontSize,
+      captionFontWeight,
+      captionLineHeight,
+      captionFontFamily,
+      captionColor,
+      captionIconWidth,
+      captionIconHeight,
+      captionIconMarginRight,
+      captionIconTintColor,
+    } = themedStyle;
 
-  function onSelectedItemsChange(selectedItems) {
-    setValue(selectedItems);
+    const textStyle = {
+      marginBottom: labelMarginBottom,
+      fontSize: labelFontSize,
+      fontWeight: labelFontWeight,
+      lineHeight: labelLineHeight,
+      fontFamily: labelFontFamily,
+      color: labelColor,
+    };
+
+    const captionStyle = {
+      marginTop: captionMarginTop,
+      fontSize: captionFontSize,
+      fontWeight: captionFontWeight,
+      lineHeight: captionLineHeight,
+      fontFamily: captionFontFamily,
+      color: captionColor,
+      //   captionIconWidth,
+      //   captionIconHeight,
+      //   captionIconMarginRight,
+      //   captionIconTintColor,
+    };
+    return (
+      <View style={styles.fieldContainer}>
+        <Text style={textStyle}>{title}</Text>
+        <SectionedMultiSelect
+          // modalWithSafeAreaView
+          // ref={multiSelect}
+          items={data}
+          uniqueKey="value"
+          // subKey="children"
+          selectText={title}
+          // showDropDowns={true}
+          // readOnlyHeadings={true}
+          onSelectedItemsChange={selectedItems => setValue(selectedItems)}
+          selectedItems={value}
+          alwaysShowSelectText
+          searchPlaceholderText={placeholder}
+          modalAnimationType={'slide'}
+          renderSelectText={() => {
+            return (
+              <View style={{flex: 1, marginBottom: 5}}>
+                <Text style={normalizeTextStyle(themedStyle, style)}>
+                  {placeholder}
+                </Text>
+              </View>
+            );
+          }}
+          headerComponent={() => (
+            <Header>
+              <Left />
+              <Body style={{flex: 3}}>
+                <Title>{title}</Title>
+              </Body>
+              <Right></Right>
+            </Header>
+          )}
+          // styles={{
+          //   modalWrapper: {
+          //     // height: SCREEN_HEIGHT,
+          //     // width: SCREEN_WIDTH,
+          //     backgroundColor: 'white',
+          //     flex: 1,
+          //   },
+          //   // listContainer: {
+          //   //   flex: 1,
+          //   //   height: SCREEN_HEIGHT,
+          //   //   width: SCREEN_WIDTH,
+          //   // // },
+          //   // container: {
+          //   //   flex: 1,
+          //   // },
+          //   button: {
+          //     width: '90%',
+          //     borderRadius: 10,
+          //     alignSelf: 'center',
+          //     marginTop: 25,
+          //   },
+          //   selectToggle: {
+          //     marginBottom: 5,
+          //     ...normalizeStyle(themedStyle, style),
+          //   },
+          //   selectToggleText: normalizeTextStyle(themedStyle, style),
+          // }}
+          styles={{
+            modalWrapper: {
+              height: SCREEN_HEIGHT,
+              width: SCREEN_WIDTH,
+              backgroundColor: 'white',
+            },
+            listContainer: {
+              flex: 1,
+              height: SCREEN_HEIGHT,
+              width: SCREEN_WIDTH,
+            },
+            container: {
+              flex: 1,
+              // height: deviceHeight,
+              // width: deviceWidth
+              marginHorizontal: 0,
+              marginVertical: 0,
+              paddingBottom: '5%',
+            },
+            button: {
+              width: '90%',
+              borderRadius: 10,
+              alignSelf: 'center',
+              marginTop: 25,
+            },
+            selectToggle: {
+              marginBottom: 5,
+              ...normalizeStyle(themedStyle, style),
+            },
+            selectToggleText: normalizeTextStyle(themedStyle, style),
+          }}
+        />
+        {error && <Text style={captionStyle}>{error}</Text>}
+      </View>
+    );
   }
+}
 
-  function onCancelPress() {
-    multiSelect.current._toggleSelector();
-
-    // set back to whatever was original
-    // setSelectedItems(selectedItems);
-    // handleChange("language_list")(selectedItems);
-  }
-
-  return (
-    <View style={styles.fieldContainer}>
-      <SectionedMultiSelect
-        // modalWithSafeAreaView
-        ref={multiSelect}
-        items={languages}
-        uniqueKey="name"
-        // subKey="children"
-        selectText={title}
-        // showDropDowns={true}
-        // readOnlyHeadings={true}
-        onSelectedItemsChange={onSelectedItemsChange}
-        selectedItems={selectedItems}
-        alwaysShowSelectText
-        searchPlaceholderText={translate('profile_field.search_text')}
-        renderSelectText={() => {
-          return (
-            <View style={{flex: 1, marginBottom: 5}}>
-              <Text style={{color: 'rgba(0,122,255,1)', fontSize: 17}}>
-                {translate('profile_field.specialties')}
-              </Text>
-            </View>
-          );
-        }}
-        headerComponent={() => (
-          <Header>
-            <Left>
-              {/* <TouchableOpacity
-                  onPress={() => onCancelPress()}
-                >
-                  <Text style={{ color: "rgba(0,122,255,1)", fontSize: 17 }}>
-                    Cancel
-                  </Text>
-                </TouchableOpacity> */}
-            </Left>
-            <Body style={{flex: 3}}>
-              <Title>{translate('profile_field.select_specialty')}</Title>
-            </Body>
-            <Right></Right>
-          </Header>
-        )}
-        styles={{
-          modalWrapper: {
-            height: deviceHeight,
-            width: deviceWidth,
-            backgroundColor: 'white',
-          },
-          listContainer: {
-            flex: 1,
-            height: deviceHeight,
-            width: deviceWidth,
-          },
-          container: {
-            flex: 1,
-            // height: deviceHeight,
-            // width: deviceWidth
-            marginHorizontal: 0,
-            marginVertical: 0,
-            paddingBottom: '5%',
-          },
-          button: {
-            width: '90%',
-            borderRadius: 10,
-            alignSelf: 'center',
-            marginTop: 25,
-          },
-          selectToggle: {
-            marginBottom: 5,
-          },
-          selectToggleText: {
-            color: 'rgba(0,122,255,1)',
-          },
-        }}
-        modalAnimationType={'slide'}
-      />
-    </View>
-    //   {errorMsg ? (
-    //     <Text
-    //       style={{
-    //         fontSize: fontSize.msg,
-    //         marginTop: 4,
-    //         color: errorMsg ? color.red : color.black,
-    //       }}>
-    //       {errorMsg}
-    //     </Text>
-    //   ) : null}
-    // </View>
-  );
-};
-
-export default MultiSelectPickerField;
+export default styled(MultiSelectPickerField);

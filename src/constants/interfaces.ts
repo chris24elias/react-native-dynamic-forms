@@ -5,3 +5,8 @@ export interface FieldComponentProps {
   error: any;
   title: string;
 }
+
+export interface Option {
+  label: string;
+  value: any;
+}

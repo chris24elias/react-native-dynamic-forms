@@ -24,6 +24,7 @@ import DatePickerField from './components/DatePickerField';
 import ChooseAvatar from './components/ChooseAvatar';
 import TagsInputField from './components/TagsInputField';
 import PickerField from './components/PickerField';
+import MultiSelectPickerField from './components/MultiSelectPickerField';
 
 interface Option {
   text: string;
@@ -39,7 +40,8 @@ export interface Field {
     | 'datePickerField'
     | 'avatarField'
     | 'tagsInputField'
-    | 'pickerField';
+    | 'pickerField'
+    | 'multiSelectPickerField';
   placeholder?: string;
   title: string;
   initialValue: any;
@@ -94,14 +96,15 @@ const DynamicForm = ({form, schema}: DynamicFormProps) => {
       };
 
       if (type == 'textField') {
-        textFieldKeys.push(index);
-        textFieldCount++;
-        return (
-          <TextField
-            textFieldIndex={textFieldCount}
-            getRef={ref => (refs[index] = ref)}
-            returnKeyLabel={index == fields.length - 1 ? 'Submit' : 'Next'}
-            onSubmitEditing={keyIndex => {
+        let extraProps = {};
+        if (!sharedFieldProps.disabled) {
+          textFieldKeys.push(index);
+          textFieldCount++;
+          extraProps = {
+            textFieldIndex: textFieldCount,
+            getRef: ref => (refs[index] = ref),
+            returnKeyLabel: index == fields.length - 1 ? 'Submit' : 'Next',
+            onSubmitEditing: keyIndex => {
               if (index < fields.length - 1) {
                 if (refs[textFieldKeys[keyIndex]]) {
                   refs[textFieldKeys[keyIndex]].focus();
@@ -109,10 +112,11 @@ const DynamicForm = ({form, schema}: DynamicFormProps) => {
               } else {
                 handleSubmit();
               }
-            }}
-            {...sharedFieldProps}
-          />
-        );
+            },
+          };
+        }
+
+        return <TextField {...extraProps} {...sharedFieldProps} />;
       }
 
       // @TODO FIX MULTISELECT
@@ -151,7 +155,22 @@ const DynamicForm = ({form, schema}: DynamicFormProps) => {
             status={
               sharedFieldProps.error
                 ? 'danger'
-                : sharedFieldProps.value
+                : sharedFieldProps.value && sharedFieldProps.value
+                ? 'success'
+                : 'basic'
+            }
+          />
+        );
+      }
+
+      if (type == 'multiSelectPickerField') {
+        return (
+          <MultiSelectPickerField
+            {...sharedFieldProps}
+            status={
+              sharedFieldProps.error
+                ? 'danger'
+                : sharedFieldProps.value && sharedFieldProps.value.length
                 ? 'success'
                 : 'basic'
             }
@@ -183,7 +202,7 @@ const DynamicForm = ({form, schema}: DynamicFormProps) => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1}} forceInset={{bottom: 'never'}}>
       <LoadingOverlay visible={loading} />
       <Layout style={{flex: 1, padding: 15}}>
         <Formik
@@ -191,20 +210,24 @@ const DynamicForm = ({form, schema}: DynamicFormProps) => {
           initialValues={getInitialValues()}
           onSubmit={onsubmit}>
           {props => {
-            console.log('VALUES', props.values);
+            // console.log('VALUES', props.values);
             if (props.errors && Object.keys(props.errors).length) {
-              console.log('ERRORs', props.errors);
+              // console.log('ERRORs', props.errors);
             }
             return (
               <View style={{flex: 1}}>
-                <KeyboardAwareScrollView>
+                <KeyboardAwareScrollView
+                // extraHeight={0}
+                // enableAutomaticScroll={false}
+                // enableResetScrollToCoords={false}
+                >
                   {renderFields(props)}
+                  {/* <Button
+                    disabled={!props.isValid}
+                    onPress={() => props.handleSubmit()}>
+                    Submit
+                  </Button> */}
                 </KeyboardAwareScrollView>
-                <Button
-                  disabled={!props.isValid}
-                  onPress={() => props.handleSubmit()}>
-                  Submit
-                </Button>
               </View>
             );
           }}

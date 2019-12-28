@@ -13,6 +13,7 @@ import Login from './src/examples/ Login';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import {default as customMapping} from './custom-mapping.json';
 import ProfileForm from './src/examples/ProfileForm';
+import PracticeForm from './src/examples/PracticeForm';
 
 import {default as appTheme} from './custom-theme.json';
 import ShowCase from './src/examples/Showcase';
@@ -23,13 +24,15 @@ const App = ({}) => {
   return (
     <ApplicationProvider
       mapping={mapping}
-      theme={theme}
+      theme={light}
       // customMapping={customMapping}
     >
       <IconRegistry icons={EvaIconsPack} />
       <SafeAreaProvider>
         {/* <Login /> */}
-        <ProfileForm />
+        {/* <ProfileForm />
+         */}
+        <PracticeForm />
         {/* <ShowCase /> */}
       </SafeAreaProvider>
     </ApplicationProvider>

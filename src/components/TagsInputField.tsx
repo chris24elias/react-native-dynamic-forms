@@ -21,7 +21,6 @@ const TagsInputField = ({
     let tagsCopy = value.slice(0);
     // let index = tagsCopy.indexOf(tag);
     tagsCopy.splice(index, 1);
-    console.log('REMOVED TAG index', index, tagsCopy);
     setValue(tagsCopy, false);
   }
 

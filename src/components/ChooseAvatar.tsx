@@ -20,6 +20,8 @@ const options = {
     skipBackup: true,
     path: 'images',
   },
+  tintColor: 'white',
+  allowsEditing: true,
 };
 
 interface ChooseAvatarProps {
@@ -36,6 +38,7 @@ const ChooseAvatar = ({
   title,
   size,
   position,
+  style,
   ...otherProps
 }: ChooseAvatarProps) => {
   function onEditPress() {
@@ -79,14 +82,15 @@ const ChooseAvatar = ({
         {...otherProps}
       /> */}
       <Avatar
-        title={title}
+        // title={title}
         source={{
           uri: value,
         }}
         // showEditButton
         // onEditPress={onEditPress}
         onPress={onEditPress}
-        size={size.height}
+        size={size ? (size.height ? size.height : size) : 'medium'}
+        style={[size, style]}
         {...otherProps}
       />
     </View>
