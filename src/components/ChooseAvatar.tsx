@@ -12,6 +12,7 @@ import CameraRoll, {saveToCameraRoll} from '@react-native-community/cameraroll';
 // import {request, PERMISSIONS} from 'react-native-permissions';
 import styles from '../constants/styles';
 import {Avatar, Image} from 'react-native-elements';
+import {styled} from '@ui-kitten/components';
 
 const options = {
   title: 'Select Avatar',
@@ -20,7 +21,7 @@ const options = {
     skipBackup: true,
     path: 'images',
   },
-  tintColor: 'white',
+  // tintColor: 'white',
   allowsEditing: true,
 };
 
@@ -92,6 +93,7 @@ const ChooseAvatar = ({
         size={size ? (size.height ? size.height : size) : 'medium'}
         style={[size, style]}
         {...otherProps}
+        // containerStyle={{marginBottom: 20}}
       />
     </View>
   );

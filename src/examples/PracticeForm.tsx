@@ -19,7 +19,13 @@ const practice_form: {[x: string]: Field} = {
     title: 'First Name',
     initialValue: 'https://picsum.photos/600',
     // size: {height: 150, width: SCREEN_WIDTH},
-    style: {height: 150, width: SCREEN_WIDTH},
+    style: {
+      height: 200,
+      width: SCREEN_WIDTH * 0.9,
+      borderRadius: 12,
+      overflow: 'hidden',
+      alignSelf: 'center',
+    },
     // position: 'center',
     // rounded: true,
   },
@@ -61,10 +67,11 @@ const practice_form: {[x: string]: Field} = {
     keyboardType: 'number-pad',
   },
   address: {
-    type: 'textField',
+    type: 'autoCompleteAddressField',
     placeholder: 'address',
     title: 'Address',
     initialValue: '',
+    apiKey: 'API-KEY',
   },
   address2: {
     type: 'textField',

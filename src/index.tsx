@@ -25,6 +25,7 @@ import ChooseAvatar from './components/ChooseAvatar';
 import TagsInputField from './components/TagsInputField';
 import PickerField from './components/PickerField';
 import MultiSelectPickerField from './components/MultiSelectPickerField';
+import AutoCompleteAddressField from './components/AutoCompleteAddressField';
 
 interface Option {
   text: string;
@@ -41,7 +42,8 @@ export interface Field {
     | 'avatarField'
     | 'tagsInputField'
     | 'pickerField'
-    | 'multiSelectPickerField';
+    | 'multiSelectPickerField'
+    | 'autoCompleteAddressField';
   placeholder?: string;
   title: string;
   initialValue: any;
@@ -176,6 +178,10 @@ const DynamicForm = ({form, schema}: DynamicFormProps) => {
             }
           />
         );
+      }
+
+      if (type == 'autoCompleteAddressField') {
+        return <AutoCompleteAddressField {...sharedFieldProps} />;
       }
     });
   }
