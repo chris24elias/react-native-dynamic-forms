@@ -24,12 +24,14 @@ export interface Field {
     | 'pickerField'
     | 'multiSelectPickerField'
     | 'autoCompleteAddressField'
-    | 'buttonGroupField';
+    | 'buttonGroupField'
+    | 'fieldSection';
   placeholder?: string;
   title: string;
   initialValue: any;
   options?: Option[];
   secure?: boolean;
+  fields?: {[x: string]: Field};
 }
 
 // interface Option {
