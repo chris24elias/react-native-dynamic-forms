@@ -27,44 +27,38 @@ import PickerField from './components/PickerField';
 import MultiSelectPickerField from './components/MultiSelectPickerField';
 import AutoCompleteAddressField from './components/AutoCompleteAddressField';
 import styles from './constants/styles';
-
-interface Option {
-  text: string;
-}
-
-export interface Field {
-  type:
-    | 'textField'
-    | 'selectField'
-    | 'checkboxField'
-    | 'toggleField'
-    | 'radioField'
-    | 'datePickerField'
-    | 'avatarField'
-    | 'tagsInputField'
-    | 'pickerField'
-    | 'multiSelectPickerField'
-    | 'autoCompleteAddressField';
-  placeholder?: string;
-  title: string;
-  initialValue: any;
-  options?: Option[];
-  secure?: boolean;
-}
+import {Field} from './constants/interfaces';
+import ButtonGroupField from './components/ButtonGroupField';
 
 interface DynamicFormProps {
   form: {[x: string]: Field};
   schema: any;
+  onSubmit: any;
   showErrorSummary?: boolean;
+  submitButtonStyle?: any;
+  submitButtonTextStyle?: any;
+  containerStyle?: any;
+  contentContainerStyle?: any;
+  scrollViewProps?: any;
+  formikProps?: any;
+  showsVerticalScrollIndicator?: boolean;
+  submitButtonText?: string;
 }
 
 const DynamicForm = ({
   form,
   schema,
-  showErrorSummary = true,
+  onSubmit,
+  showErrorSummary = false,
+  submitButtonStyle = {},
+  submitButtonTextStyle = {},
+  containerStyle = {},
+  contentContainerStyle = {},
+  scrollViewProps = {},
+  formikProps,
+  showsVerticalScrollIndicator = false,
+  submitButtonText = 'Submit',
 }: DynamicFormProps) => {
-  const [loading, setLoading] = useState(false);
-
   const refs = [];
   let textFieldKeys = [];
 
@@ -189,6 +183,10 @@ const DynamicForm = ({
       if (type == 'autoCompleteAddressField') {
         return <AutoCompleteAddressField {...sharedFieldProps} />;
       }
+
+      if (type == 'buttonGroupField') {
+        return <ButtonGroupField {...sharedFieldProps} />;
+      }
     });
   }
 
@@ -229,19 +227,20 @@ const DynamicForm = ({
   }
 
   function onsubmit(values) {
-    console.log('SUBMITTING', values);
-
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1500);
+    if (onSubmit) {
+      onSubmit(values);
+    }
   }
 
   function getInitialValues() {
     const initialValues = {};
     Object.keys(form).forEach(key => {
       if (form[key].type == 'selectField') {
-        initialValues[key] = {text: form[key].initialValue};
+        if (form[key].initialValue) {
+          initialValues[key] = {text: form[key].initialValue};
+        } else {
+          initialValues[key] = form[key].initialValue;
+        }
       } else {
         initialValues[key] = form[key].initialValue;
       }
@@ -250,43 +249,33 @@ const DynamicForm = ({
   }
 
   return (
-    <SafeAreaView style={{flex: 1}} forceInset={{bottom: 'never'}}>
-      <LoadingOverlay visible={loading} />
-      <Layout style={{flex: 1, padding: 15}}>
-        <Formik
-          validationSchema={schema}
-          initialValues={getInitialValues()}
-          onSubmit={onsubmit}>
-          {props => {
-            // console.log('VALUES', props.values);
-            if (props.errors && Object.keys(props.errors).length) {
-              // console.log('ERRORs', props.errors);
-            }
-            return (
-              <View style={{flex: 1}}>
-                <KeyboardAwareScrollView
-                  showsVerticalScrollIndicator={false}
-                  // extraHeight={0}
-                  // enableAutomaticScroll={false}
-                  // enableResetScrollToCoords={false}
-                >
-                  {renderFields(props)}
-
-                  {renderErrors(props.errors)}
-                  <Button
-                    style={{marginTop: 5}}
-                    disabled={!props.isValid}
-                    onPress={() => props.handleSubmit()}>
-                    Submit
-                  </Button>
-                </KeyboardAwareScrollView>
-              </View>
-            );
-          }}
-        </Formik>
-      </Layout>
-    </SafeAreaView>
+    <Formik
+      validationSchema={schema}
+      initialValues={getInitialValues()}
+      onSubmit={onsubmit}
+      {...formikProps}>
+      {props => {
+        return (
+          <Layout style={[{flex: 1, padding: 15}, containerStyle]}>
+            <KeyboardAwareScrollView
+              showsVerticalScrollIndicator={showsVerticalScrollIndicator}
+              contentContainerStyle={contentContainerStyle}
+              {...scrollViewProps}>
+              {renderFields(props)}
+              {renderErrors(props.errors)}
+              <Button
+                style={[{marginTop: 5}, submitButtonStyle]}
+                textStyle={submitButtonTextStyle}
+                disabled={!props.isValid}
+                onPress={() => props.handleSubmit()}>
+                {submitButtonText}
+              </Button>
+            </KeyboardAwareScrollView>
+          </Layout>
+        );
+      }}
+    </Formik>
   );
 };
 
-export default DynamicForm;
+export default React.memo(DynamicForm);

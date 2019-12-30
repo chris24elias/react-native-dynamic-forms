@@ -32,13 +32,13 @@ const CheckboxField = ({
         onChange={isChecked => {
           setValue(isChecked);
         }}
-        status={error ? 'danger' : 'basic'}
+        status={error ? 'danger' : value ? 'success' : 'basic'}
         {...otherProps}
       />
       <Text
         appearance="hint"
         category="label"
-        status={error ? 'danger' : 'basic'}
+        status={error ? 'danger' : value ? 'success' : 'basic'}
         style={{
           marginTop: 5,
           fontWeight: '400',

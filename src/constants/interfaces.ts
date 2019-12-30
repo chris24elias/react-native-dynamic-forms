@@ -10,3 +10,28 @@ export interface Option {
   label: string;
   value: any;
 }
+
+export interface Field {
+  type:
+    | 'textField'
+    | 'selectField'
+    | 'checkboxField'
+    | 'toggleField'
+    | 'radioField'
+    | 'datePickerField'
+    | 'avatarField'
+    | 'tagsInputField'
+    | 'pickerField'
+    | 'multiSelectPickerField'
+    | 'autoCompleteAddressField'
+    | 'buttonGroupField';
+  placeholder?: string;
+  title: string;
+  initialValue: any;
+  options?: Option[];
+  secure?: boolean;
+}
+
+// interface Option {
+//   text: string;
+// }

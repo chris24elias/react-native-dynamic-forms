@@ -1,15 +1,17 @@
 import React from 'react';
-import DynamicForm, {Field} from '..';
+import DynamicForm from '..';
 import * as yup from 'yup';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 interface LoginProps {}
 
-const loginForm: {[x: string]: Field} = {
+const loginForm = {
   email: {
     type: 'textField',
     placeholder: 'email',
     title: 'Email',
     initialValue: '',
+    keyboardType: 'email-address',
   },
   password: {
     type: 'textField',
@@ -24,6 +26,8 @@ const loginForm: {[x: string]: Field} = {
     placeholder: 'check',
     title: 'I agree with Terms & Conditions',
     initialValue: false,
+    style: {},
+    textStyle: {},
   },
 };
 
@@ -33,11 +37,26 @@ const schema = yup.object({
     .email()
     .required(),
   password: yup.string().required(),
-  checkbox: yup.bool().oneOf([true], 'Field must be checked'),
+  checkbox: yup
+    .bool()
+    .oneOf([true], 'You must agree with terms and conditions'),
 });
 
 const Login = ({}: LoginProps) => {
-  return <DynamicForm form={loginForm} schema={schema} />;
+  return (
+    <SafeAreaView style={{flex: 1}}>
+      <DynamicForm
+        form={loginForm}
+        schema={schema}
+        onSubmit={values => {
+          console.log('SUBMITTED VALUES', values);
+        }}
+        submitButtonText="Login"
+        submitButtonStyle={{}}
+        submitButtonTextStyle={{}}
+      />
+    </SafeAreaView>
+  );
 };
 
 export default Login;

@@ -10,6 +10,7 @@ interface RadioFieldProps {
   title: string;
   placeholder: string;
   error: any;
+  titleStyle: any;
 }
 
 const RadioField = ({
@@ -19,10 +20,14 @@ const RadioField = ({
   title,
   placeholder,
   error,
+  titleStyle,
   ...otherProps
 }: RadioFieldProps) => {
   return (
     <View style={styles.fieldContainer}>
+      <Text category="c2" style={[{marginBottom: 10}, titleStyle]}>
+        {title}
+      </Text>
       <RadioGroup
         selectedIndex={data.findIndex(val => val.text == value)}
         onChange={index => setValue(data[index].text)}

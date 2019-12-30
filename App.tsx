@@ -17,6 +17,7 @@ import PracticeForm from './src/examples/PracticeForm';
 
 import {default as appTheme} from './custom-theme.json';
 import ShowCase from './src/examples/Showcase';
+import CreateShipment from './src/examples/CreateShipment';
 
 const theme = {...light, ...appTheme};
 
@@ -32,8 +33,9 @@ const App = ({}) => {
         {/* <Login /> */}
         {/* <ProfileForm />
          */}
-        <PracticeForm />
+        {/* <PracticeForm /> */}
         {/* <ShowCase /> */}
+        <CreateShipment />
       </SafeAreaProvider>
     </ApplicationProvider>
   );
