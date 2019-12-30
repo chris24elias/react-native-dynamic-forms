@@ -1,20 +1,8 @@
-import React, {useRef, useEffect, useState} from 'react';
-import {View, StyleSheet} from 'react-native';
-import {
-  Input,
-  Select,
-  Layout,
-  Button,
-  Text,
-  CheckBox,
-} from '@ui-kitten/components';
-// import { SafeAreaView } from "react-navigation";
-import * as yup from 'yup';
+import React from 'react';
+import {View} from 'react-native';
+import {Layout, Button, Text} from '@ui-kitten/components';
 import {Formik, FormikProps} from 'formik';
-import {Header} from 'native-base';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import LoadingOverlay from './components/LoadingOverlay';
-import SafeAreaView from 'react-native-safe-area-view';
 import CheckboxField from './components/CheckboxField';
 import TextField from './components/TextField';
 import SelectField from './components/SelectField';
@@ -46,7 +34,7 @@ interface DynamicFormProps {
 }
 
 const DynamicForm = ({
-  form,
+  form: masterForm,
   schema,
   onSubmit,
   showErrorSummary = false,
@@ -62,9 +50,7 @@ const DynamicForm = ({
   const refs = [];
   let textFieldKeys = [];
 
-  function renderFields(props: FormikProps<any>) {
-    const {values, handleChange, errors, handleSubmit, setFieldValue} = props;
-
+  function renderForm(form, props: FormikProps<any>) {
     if (!form) {
       return null;
     }
@@ -72,6 +58,23 @@ const DynamicForm = ({
     let textFieldCount = 0;
     textFieldKeys = [];
     let fields = Object.keys(form);
+    return renderFields(form, fields, props, {textFieldCount, textFieldKeys});
+  }
+
+  function renderFields(
+    form,
+    fields,
+    formikProps,
+    {textFieldCount, textFieldKeys},
+  ) {
+    const {
+      values,
+      handleChange,
+      errors,
+      handleSubmit,
+      setFieldValue,
+    } = formikProps;
+
     return fields.map((key, index) => {
       const field = form[key];
       const name = key;
@@ -96,6 +99,12 @@ const DynamicForm = ({
         placeholder,
         data: options,
       };
+
+      if (type == 'custom' && field.component) {
+        let CustomComponent = field.component;
+        let {key, component, ...restProps} = sharedFieldProps;
+        return <CustomComponent key={key} {...restProps} />;
+      }
 
       if (type == 'textField') {
         let extraProps = {};
@@ -187,6 +196,14 @@ const DynamicForm = ({
       if (type == 'buttonGroupField') {
         return <ButtonGroupField {...sharedFieldProps} />;
       }
+
+      if (type == 'fieldSection') {
+        return (
+          <View key={sharedFieldProps.key} style={{flexDirection: 'row'}}>
+            {renderForm(field.fields, formikProps)}
+          </View>
+        );
+      }
     });
   }
 
@@ -232,26 +249,35 @@ const DynamicForm = ({
     }
   }
 
-  function getInitialValues() {
+  function getInitialValues(form) {
     const initialValues = {};
+    getInitialValuesHelper(form, initialValues);
+    return initialValues;
+  }
+
+  function getInitialValuesHelper(form, initialValues) {
     Object.keys(form).forEach(key => {
-      if (form[key].type == 'selectField') {
-        if (form[key].initialValue) {
-          initialValues[key] = {text: form[key].initialValue};
+      const field: Field = form[key];
+      const {type, initialValue} = field;
+      if (type == 'fieldSection') {
+        // do something
+        getInitialValuesHelper(field.fields, initialValues);
+      } else if (type == 'selectField') {
+        if (initialValue) {
+          initialValues[key] = {text: initialValue};
         } else {
-          initialValues[key] = form[key].initialValue;
+          initialValues[key] = initialValue;
         }
       } else {
-        initialValues[key] = form[key].initialValue;
+        initialValues[key] = initialValue;
       }
     });
-    return initialValues;
   }
 
   return (
     <Formik
       validationSchema={schema}
-      initialValues={getInitialValues()}
+      initialValues={getInitialValues(masterForm)}
       onSubmit={onsubmit}
       {...formikProps}>
       {props => {
@@ -261,7 +287,7 @@ const DynamicForm = ({
               showsVerticalScrollIndicator={showsVerticalScrollIndicator}
               contentContainerStyle={contentContainerStyle}
               {...scrollViewProps}>
-              {renderFields(props)}
+              {renderForm(masterForm, props)}
               {renderErrors(props.errors)}
               <Button
                 style={[{marginTop: 5}, submitButtonStyle]}

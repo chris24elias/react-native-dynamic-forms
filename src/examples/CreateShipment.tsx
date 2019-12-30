@@ -25,20 +25,25 @@ const loginForm = {
     initialValue: '',
   },
 
-  service_mode: {
-    type: 'selectField',
-    placeholder: '',
-    title: 'Service Mode',
-    initialValue: 'LTL',
-    options: [{text: 'LTL'}, {text: 'Option 2'}, {text: 'Option 3'}],
-  },
+  section: {
+    type: 'fieldSection',
+    fields: {
+      service_mode: {
+        type: 'selectField',
+        placeholder: '',
+        title: 'Service Mode',
+        initialValue: 'LTL',
+        options: [{text: 'LTL'}, {text: 'Option 2'}, {text: 'Option 3'}],
+      },
 
-  transit_service: {
-    type: 'selectField',
-    placeholder: 'Select One...',
-    title: 'Transit Service',
-    initialValue: null,
-    options: [{text: 'LTL'}, {text: 'Option 2'}, {text: 'Option 3'}],
+      transit_service: {
+        type: 'selectField',
+        placeholder: 'Select One...',
+        title: 'Transit Service',
+        initialValue: 'Option 2',
+        options: [{text: 'LTL'}, {text: 'Option 2'}, {text: 'Option 3'}],
+      },
+    },
   },
 
   radio: {

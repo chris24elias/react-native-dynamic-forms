@@ -1,6 +1,8 @@
 import React from 'react';
-import DynamicForm, {Field} from '..';
+import DynamicForm from '..';
 import * as yup from 'yup';
+import {Text} from '@ui-kitten/components';
+import {Field} from '../constants/interfaces';
 
 interface ShowCaseProps {}
 
@@ -49,6 +51,15 @@ const MOCK_FORM: {[x: string]: Field} = {
     title: 'Date',
     initialValue: new Date(),
   },
+
+  customText: {
+    type: 'custom',
+    initialValue: '',
+    component: props => {
+      console.log('custom component', props);
+      return <Text>{props.value}</Text>;
+    },
+  },
 };
 
 const schema = yup.object({
@@ -57,6 +68,7 @@ const schema = yup.object({
   select: yup.string().required(),
   checkbox: yup.boolean().required(),
   toggle: yup.boolean().required(),
+  customText: yup.string().required(),
 });
 
 const ShowCase = ({}: ShowCaseProps) => {

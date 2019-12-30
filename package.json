@@ -49,9 +49,6 @@
     "react-test-renderer": "16.9.0",
     "typescript": "^3.7.3"
   },
-  "prettier": {
-    "printWidth": 110
-  },
   "jest": {
     "preset": "react-native",
     "moduleFileExtensions": [
