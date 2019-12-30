@@ -7,6 +7,8 @@ const styles = StyleSheet.create({
   fieldContainer: {
     // flex: 1,
     marginBottom: 15,
+    flex: 1,
+    flexDirection: 'column',
   },
   radio: {
     marginVertical: 8,
