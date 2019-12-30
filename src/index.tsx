@@ -1,25 +1,25 @@
-import React from 'react';
-import {View} from 'react-native';
-import {Layout, Button, Text} from '@ui-kitten/components';
-import {Formik, FormikProps} from 'formik';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import CheckboxField from './components/CheckboxField';
-import TextField from './components/TextField';
-import SelectField from './components/SelectField';
-import ToggleField from './components/ToggleField';
-import RadioField from './components/RadioField';
-import DatePickerField from './components/DatePickerField';
-import ChooseAvatar from './components/ChooseAvatar';
-import TagsInputField from './components/TagsInputField';
-import PickerField from './components/PickerField';
-import MultiSelectPickerField from './components/MultiSelectPickerField';
-import AutoCompleteAddressField from './components/AutoCompleteAddressField';
-import styles from './constants/styles';
-import {Field} from './constants/interfaces';
-import ButtonGroupField from './components/ButtonGroupField';
+import React from "react";
+import { View } from "react-native";
+import { Layout, Button, Text } from "@ui-kitten/components";
+import { Formik, FormikProps } from "formik";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import CheckboxField from "./components/CheckboxField";
+import TextField from "./components/TextField";
+import SelectField from "./components/SelectField";
+import ToggleField from "./components/ToggleField";
+import RadioField from "./components/RadioField";
+import DatePickerField from "./components/DatePickerField";
+import ChooseAvatar from "./components/ChooseAvatar";
+import TagsInputField from "./components/TagsInputField";
+import PickerField from "./components/PickerField";
+import MultiSelectPickerField from "./components/MultiSelectPickerField";
+import AutoCompleteAddressField from "./components/AutoCompleteAddressField";
+import styles from "./constants/styles";
+import { Field } from "./constants/interfaces";
+import ButtonGroupField from "./components/ButtonGroupField";
 
 interface DynamicFormProps {
-  form: {[x: string]: Field};
+  form: { [x: string]: Field };
   schema: any;
   onSubmit: any;
   showErrorSummary?: boolean;
@@ -45,7 +45,7 @@ const DynamicForm = ({
   scrollViewProps = {},
   formikProps,
   showsVerticalScrollIndicator = false,
-  submitButtonText = 'Submit',
+  submitButtonText = "Submit"
 }: DynamicFormProps) => {
   const refs = [];
   let textFieldKeys = [];
@@ -58,34 +58,16 @@ const DynamicForm = ({
     let textFieldCount = 0;
     textFieldKeys = [];
     let fields = Object.keys(form);
-    return renderFields(form, fields, props, {textFieldCount, textFieldKeys});
+    return renderFields(form, fields, props, { textFieldCount, textFieldKeys });
   }
 
-  function renderFields(
-    form,
-    fields,
-    formikProps,
-    {textFieldCount, textFieldKeys},
-  ) {
-    const {
-      values,
-      handleChange,
-      errors,
-      handleSubmit,
-      setFieldValue,
-    } = formikProps;
+  function renderFields(form, fields, formikProps, { textFieldCount, textFieldKeys }) {
+    const { values, errors, handleSubmit, setFieldValue } = formikProps;
 
     return fields.map((key, index) => {
       const field = form[key];
       const name = key;
-      const {
-        type,
-        placeholder,
-        title,
-        options,
-        initialValue,
-        ...otherProps
-      } = field;
+      const { type, placeholder, title, options, initialValue, ...otherProps } = field;
 
       const sharedFieldProps = {
         ...otherProps,
@@ -97,16 +79,16 @@ const DynamicForm = ({
         },
         title: title,
         placeholder,
-        data: options,
+        data: options
       };
 
-      if (type == 'custom' && field.component) {
+      if (type == "custom" && field.component) {
         let CustomComponent = field.component;
-        let {key, component, ...restProps} = sharedFieldProps;
+        let { key, component, ...restProps } = sharedFieldProps;
         return <CustomComponent key={key} {...restProps} />;
       }
 
-      if (type == 'textField') {
+      if (type == "textField") {
         let extraProps = {};
         if (!sharedFieldProps.disabled) {
           textFieldKeys.push(index);
@@ -114,7 +96,7 @@ const DynamicForm = ({
           extraProps = {
             textFieldIndex: textFieldCount,
             getRef: ref => (refs[index] = ref),
-            returnKeyLabel: index == fields.length - 1 ? 'Submit' : 'Next',
+            returnKeyLabel: index == fields.length - 1 ? "Submit" : "Next",
             onSubmitEditing: keyIndex => {
               if (index < fields.length - 1) {
                 if (refs[textFieldKeys[keyIndex]]) {
@@ -123,7 +105,7 @@ const DynamicForm = ({
               } else {
                 handleSubmit();
               }
-            },
+            }
           };
         }
 
@@ -131,75 +113,75 @@ const DynamicForm = ({
       }
 
       // @TODO FIX MULTISELECT
-      if (type == 'selectField') {
+      if (type == "selectField") {
         return <SelectField {...sharedFieldProps} />;
       }
 
-      if (type == 'radioField') {
+      if (type == "radioField") {
         return <RadioField {...sharedFieldProps} />;
       }
 
-      if (type == 'checkboxField') {
+      if (type == "checkboxField") {
         return <CheckboxField {...sharedFieldProps} />;
       }
 
-      if (type == 'toggleField') {
+      if (type == "toggleField") {
         return <ToggleField {...sharedFieldProps} />;
       }
 
-      if (type == 'datePickerField') {
+      if (type == "datePickerField") {
         return <DatePickerField {...sharedFieldProps} />;
       }
 
-      if (type == 'avatarField') {
+      if (type == "avatarField") {
         return <ChooseAvatar {...sharedFieldProps} />;
       }
 
-      if (type == 'tagsInputField') {
+      if (type == "tagsInputField") {
         return <TagsInputField {...sharedFieldProps} />;
       }
 
-      if (type == 'pickerField') {
+      if (type == "pickerField") {
         return (
           <PickerField
             {...sharedFieldProps}
             status={
               sharedFieldProps.error
-                ? 'danger'
+                ? "danger"
                 : sharedFieldProps.value && sharedFieldProps.value
-                ? 'success'
-                : 'basic'
+                ? "success"
+                : "basic"
             }
           />
         );
       }
 
-      if (type == 'multiSelectPickerField') {
+      if (type == "multiSelectPickerField") {
         return (
           <MultiSelectPickerField
             {...sharedFieldProps}
             status={
               sharedFieldProps.error
-                ? 'danger'
+                ? "danger"
                 : sharedFieldProps.value && sharedFieldProps.value.length
-                ? 'success'
-                : 'basic'
+                ? "success"
+                : "basic"
             }
           />
         );
       }
 
-      if (type == 'autoCompleteAddressField') {
+      if (type == "autoCompleteAddressField") {
         return <AutoCompleteAddressField {...sharedFieldProps} />;
       }
 
-      if (type == 'buttonGroupField') {
+      if (type == "buttonGroupField") {
         return <ButtonGroupField {...sharedFieldProps} />;
       }
 
-      if (type == 'fieldSection') {
+      if (type == "fieldSection") {
         return (
-          <View key={sharedFieldProps.key} style={{flexDirection: 'row'}}>
+          <View key={sharedFieldProps.key} style={{ flexDirection: "row" }}>
             {renderForm(field.fields, formikProps)}
           </View>
         );
@@ -215,11 +197,7 @@ const DynamicForm = ({
       let x = Object.keys(errors).map((key, index) => {
         const error = errors[key];
         return (
-          <Text
-            key={index}
-            style={{marginBottom: 5}}
-            category="c2"
-            status={'warning'}>
+          <Text key={index} style={{ marginBottom: 5 }} category="c2" status={"warning"}>
             • {error}
           </Text>
         );
@@ -228,15 +206,16 @@ const DynamicForm = ({
       return (
         <View
           style={{
-            backgroundColor: '#ffeaa780',
+            backgroundColor: "#ffeaa780",
             padding: 10,
             borderRadius: 8,
-            ...styles.fieldContainer,
-          }}>
-          <Text style={{marginBottom: 7}} category="s1" status={'warning'}>
+            ...styles.fieldContainer
+          }}
+        >
+          <Text style={{ marginBottom: 7 }} category="s1" status={"warning"}>
             Please address the following
           </Text>
-          <View style={{paddingLeft: 5}}>{x}</View>
+          <View style={{ paddingLeft: 5 }}>{x}</View>
         </View>
       );
     }
@@ -258,13 +237,13 @@ const DynamicForm = ({
   function getInitialValuesHelper(form, initialValues) {
     Object.keys(form).forEach(key => {
       const field: Field = form[key];
-      const {type, initialValue} = field;
-      if (type == 'fieldSection') {
+      const { type, initialValue } = field;
+      if (type == "fieldSection") {
         // do something
         getInitialValuesHelper(field.fields, initialValues);
-      } else if (type == 'selectField') {
+      } else if (type == "selectField") {
         if (initialValue) {
-          initialValues[key] = {text: initialValue};
+          initialValues[key] = { text: initialValue };
         } else {
           initialValues[key] = initialValue;
         }
@@ -279,21 +258,24 @@ const DynamicForm = ({
       validationSchema={schema}
       initialValues={getInitialValues(masterForm)}
       onSubmit={onsubmit}
-      {...formikProps}>
+      {...formikProps}
+    >
       {props => {
         return (
-          <Layout style={[{flex: 1, padding: 15}, containerStyle]}>
+          <Layout style={[{ flex: 1, padding: 15 }, containerStyle]}>
             <KeyboardAwareScrollView
               showsVerticalScrollIndicator={showsVerticalScrollIndicator}
               contentContainerStyle={contentContainerStyle}
-              {...scrollViewProps}>
+              {...scrollViewProps}
+            >
               {renderForm(masterForm, props)}
               {renderErrors(props.errors)}
               <Button
-                style={[{marginTop: 5}, submitButtonStyle]}
+                style={[{ marginTop: 5 }, submitButtonStyle]}
                 textStyle={submitButtonTextStyle}
                 disabled={!props.isValid}
-                onPress={() => props.handleSubmit()}>
+                onPress={() => props.handleSubmit()}
+              >
                 {submitButtonText}
               </Button>
             </KeyboardAwareScrollView>
