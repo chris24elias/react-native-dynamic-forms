@@ -4,41 +4,57 @@ import * as yup from 'yup';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 const loginForm = {
-  shipper: {
-    type: 'textField',
-    placeholder: 'Company Name',
-    title: 'Shipper',
-    initialValue: '',
-    keyboardType: 'email-address',
-  },
-  location: {
-    type: 'textField',
-    placeholder: 'Address',
-    title: 'Location',
-    initialValue: '',
-  },
-
-  BOL: {
-    type: 'textField',
-    placeholder: 'Optional',
-    title: 'BOL #',
-    initialValue: '',
-  },
-
-  service_mode: {
-    type: 'selectField',
-    placeholder: '',
-    title: 'Service Mode',
-    initialValue: 'LTL',
-    options: [{text: 'LTL'}, {text: 'Option 2'}, {text: 'Option 3'}],
+  section1: {
+    type: 'fieldSection',
+    fields: {
+      shipper: {
+        type: 'textField',
+        placeholder: 'Company Name',
+        title: 'Shipper',
+        initialValue: 'asd',
+        keyboardType: 'email-address',
+      },
+      location: {
+        type: 'textField',
+        placeholder: 'Address',
+        title: 'Location',
+        initialValue: 'dfgd',
+      },
+      BOL: {
+        type: 'textField',
+        placeholder: 'Optional',
+        title: 'BOL #',
+        initialValue: '',
+      },
+    },
   },
 
-  transit_service: {
-    type: 'selectField',
-    placeholder: 'Select One...',
-    title: 'Transit Service',
-    initialValue: null,
-    options: [{text: 'LTL'}, {text: 'Option 2'}, {text: 'Option 3'}],
+  // BOL: {
+  //   type: 'textField',
+  //   placeholder: 'Optional',
+  //   title: 'BOL #',
+  //   initialValue: '',
+  // },
+
+  section: {
+    type: 'fieldSection',
+    fields: {
+      service_mode: {
+        type: 'selectField',
+        placeholder: '',
+        title: 'Service Mode',
+        initialValue: 'LTL',
+        options: [{text: 'LTL'}, {text: 'Option 2'}, {text: 'Option 3'}],
+      },
+
+      transit_service: {
+        type: 'selectField',
+        placeholder: 'Select One...',
+        title: 'Transit Service',
+        initialValue: null,
+        options: [{text: 'LTL'}, {text: 'Option 2'}, {text: 'Option 3'}],
+      },
+    },
   },
 
   radio: {

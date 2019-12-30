@@ -1,20 +1,8 @@
-import React, {useRef, useEffect, useState} from 'react';
-import {View, StyleSheet} from 'react-native';
-import {
-  Input,
-  Select,
-  Layout,
-  Button,
-  Text,
-  CheckBox,
-} from '@ui-kitten/components';
-// import { SafeAreaView } from "react-navigation";
-import * as yup from 'yup';
+import React from 'react';
+import {View} from 'react-native';
+import {Layout, Button, Text} from '@ui-kitten/components';
 import {Formik, FormikProps} from 'formik';
-import {Header} from 'native-base';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import LoadingOverlay from './components/LoadingOverlay';
-import SafeAreaView from 'react-native-safe-area-view';
 import CheckboxField from './components/CheckboxField';
 import TextField from './components/TextField';
 import SelectField from './components/SelectField';
@@ -63,8 +51,6 @@ const DynamicForm = ({
   let textFieldKeys = [];
 
   function renderFields(props: FormikProps<any>) {
-    const {values, handleChange, errors, handleSubmit, setFieldValue} = props;
-
     if (!form) {
       return null;
     }
@@ -73,121 +59,187 @@ const DynamicForm = ({
     textFieldKeys = [];
     let fields = Object.keys(form);
     return fields.map((key, index) => {
-      const field = form[key];
-      const name = key;
-      const {
-        type,
-        placeholder,
-        title,
-        options,
-        initialValue,
-        ...otherProps
-      } = field;
-
-      const sharedFieldProps = {
-        ...otherProps,
-        key: index,
-        value: values[name],
-        error: errors[name],
-        setValue: (value, shouldValidate) => {
-          setFieldValue(name, value, shouldValidate);
-        },
-        title: title,
-        placeholder,
-        data: options,
-      };
-
-      if (type == 'textField') {
-        let extraProps = {};
-        if (!sharedFieldProps.disabled) {
-          textFieldKeys.push(index);
-          textFieldCount++;
-          extraProps = {
-            textFieldIndex: textFieldCount,
-            getRef: ref => (refs[index] = ref),
-            returnKeyLabel: index == fields.length - 1 ? 'Submit' : 'Next',
-            onSubmitEditing: keyIndex => {
-              if (index < fields.length - 1) {
-                if (refs[textFieldKeys[keyIndex]]) {
-                  refs[textFieldKeys[keyIndex]].focus();
-                }
-              } else {
-                handleSubmit();
-              }
-            },
-          };
-        }
-
-        return <TextField {...extraProps} {...sharedFieldProps} />;
-      }
-
-      // @TODO FIX MULTISELECT
-      if (type == 'selectField') {
-        return <SelectField {...sharedFieldProps} />;
-      }
-
-      if (type == 'radioField') {
-        return <RadioField {...sharedFieldProps} />;
-      }
-
-      if (type == 'checkboxField') {
-        return <CheckboxField {...sharedFieldProps} />;
-      }
-
-      if (type == 'toggleField') {
-        return <ToggleField {...sharedFieldProps} />;
-      }
-
-      if (type == 'datePickerField') {
-        return <DatePickerField {...sharedFieldProps} />;
-      }
-
-      if (type == 'avatarField') {
-        return <ChooseAvatar {...sharedFieldProps} />;
-      }
-
-      if (type == 'tagsInputField') {
-        return <TagsInputField {...sharedFieldProps} />;
-      }
-
-      if (type == 'pickerField') {
-        return (
-          <PickerField
-            {...sharedFieldProps}
-            status={
-              sharedFieldProps.error
-                ? 'danger'
-                : sharedFieldProps.value && sharedFieldProps.value
-                ? 'success'
-                : 'basic'
-            }
-          />
-        );
-      }
-
-      if (type == 'multiSelectPickerField') {
-        return (
-          <MultiSelectPickerField
-            {...sharedFieldProps}
-            status={
-              sharedFieldProps.error
-                ? 'danger'
-                : sharedFieldProps.value && sharedFieldProps.value.length
-                ? 'success'
-                : 'basic'
-            }
-          />
-        );
-      }
-
-      if (type == 'autoCompleteAddressField') {
-        return <AutoCompleteAddressField {...sharedFieldProps} />;
-      }
-
-      if (type == 'buttonGroupField') {
-        return <ButtonGroupField {...sharedFieldProps} />;
-      }
+      return renderFieldHelper(form, fields, key, index, props, {
+        textFieldCount,
+        textFieldKeys,
+      });
     });
+  }
+
+  function renderFieldHelper(
+    formObj,
+    fields,
+    key,
+    index,
+    formikProps,
+    {textFieldCount, textFieldKeys},
+  ) {
+    const {
+      values,
+      handleChange,
+      errors,
+      handleSubmit,
+      setFieldValue,
+    } = formikProps;
+    const field = formObj[key];
+
+    if (!field) {
+      console.error(`ERROR, key ${key} does not exist in form`, formObj);
+    }
+
+    const name = key;
+    const {
+      type,
+      placeholder,
+      title,
+      options,
+      initialValue,
+      ...otherProps
+    } = field;
+
+    const sharedFieldProps = {
+      ...otherProps,
+      key: index,
+      value: values[name],
+      error: errors[name],
+      setValue: (value, shouldValidate) => {
+        setFieldValue(name, value, shouldValidate);
+      },
+      title: title,
+      placeholder,
+      data: options,
+    };
+
+    if (type == 'textField') {
+      let extraProps = {};
+      if (!sharedFieldProps.disabled) {
+        textFieldKeys.push(index);
+        textFieldCount++;
+        extraProps = {
+          textFieldIndex: textFieldCount,
+          getRef: ref => (refs[index] = ref),
+          returnKeyLabel: index == fields.length - 1 ? 'Submit' : 'Next',
+          onSubmitEditing: keyIndex => {
+            if (index < fields.length - 1) {
+              if (refs[textFieldKeys[keyIndex]]) {
+                refs[textFieldKeys[keyIndex]].focus();
+              }
+            } else {
+              handleSubmit();
+            }
+          },
+        };
+      }
+
+      return <TextField {...extraProps} {...sharedFieldProps} />;
+    }
+
+    // @TODO FIX MULTISELECT
+    if (type == 'selectField') {
+      return <SelectField {...sharedFieldProps} />;
+    }
+
+    if (type == 'radioField') {
+      return <RadioField {...sharedFieldProps} />;
+    }
+
+    if (type == 'checkboxField') {
+      return <CheckboxField {...sharedFieldProps} />;
+    }
+
+    if (type == 'toggleField') {
+      return <ToggleField {...sharedFieldProps} />;
+    }
+
+    if (type == 'datePickerField') {
+      return <DatePickerField {...sharedFieldProps} />;
+    }
+
+    if (type == 'avatarField') {
+      return <ChooseAvatar {...sharedFieldProps} />;
+    }
+
+    if (type == 'tagsInputField') {
+      return <TagsInputField {...sharedFieldProps} />;
+    }
+
+    if (type == 'pickerField') {
+      return (
+        <PickerField
+          {...sharedFieldProps}
+          status={
+            sharedFieldProps.error
+              ? 'danger'
+              : sharedFieldProps.value && sharedFieldProps.value
+              ? 'success'
+              : 'basic'
+          }
+        />
+      );
+    }
+
+    if (type == 'multiSelectPickerField') {
+      return (
+        <MultiSelectPickerField
+          {...sharedFieldProps}
+          status={
+            sharedFieldProps.error
+              ? 'danger'
+              : sharedFieldProps.value && sharedFieldProps.value.length
+              ? 'success'
+              : 'basic'
+          }
+        />
+      );
+    }
+
+    if (type == 'autoCompleteAddressField') {
+      return <AutoCompleteAddressField {...sharedFieldProps} />;
+    }
+
+    if (type == 'buttonGroupField') {
+      return <ButtonGroupField {...sharedFieldProps} />;
+    }
+
+    if (type == 'fieldSection') {
+      const subfields = field.fields;
+      const subFieldKeys = Object.keys(subfields);
+      return (
+        <View
+          key={key}
+          style={{
+            flexDirection: 'row',
+          }}>
+          {subFieldKeys.map((subFieldKey, idx) => {
+            let extraStyles = {};
+            if (idx == 0) {
+              extraStyles = {
+                marginRight: 5,
+              };
+            } else if (idx == subFieldKeys.length - 1) {
+              extraStyles = {
+                marginLeft: 5,
+              };
+            }
+            return (
+              <View key={idx} style={{flex: 1, ...extraStyles}}>
+                {renderFieldHelper(
+                  subfields,
+                  subfields,
+                  subFieldKey,
+                  idx,
+                  formikProps,
+                  {
+                    textFieldCount,
+                    textFieldKeys,
+                  },
+                )}
+              </View>
+            );
+          })}
+        </View>
+      );
+    }
   }
 
   function renderErrors(errors) {
@@ -235,17 +287,27 @@ const DynamicForm = ({
   function getInitialValues() {
     const initialValues = {};
     Object.keys(form).forEach(key => {
-      if (form[key].type == 'selectField') {
-        if (form[key].initialValue) {
-          initialValues[key] = {text: form[key].initialValue};
-        } else {
-          initialValues[key] = form[key].initialValue;
-        }
-      } else {
-        initialValues[key] = form[key].initialValue;
-      }
+      getInitialValuesHelper(initialValues, key, form);
     });
     return initialValues;
+  }
+
+  function getInitialValuesHelper(initialValues, key, formObj) {
+    if (formObj[key].type == 'fieldSection') {
+      Object.keys(formObj[key].fields).forEach(subFieldKey => {
+        getInitialValuesHelper(initialValues, subFieldKey, formObj[key].fields);
+      });
+    } else if (formObj[key].type == 'selectField') {
+      if (formObj[key].initialValue) {
+        initialValues[key] = {
+          text: formObj[key].initialValue,
+        };
+      } else {
+        initialValues[key] = formObj[key].initialValue;
+      }
+    } else {
+      initialValues[key] = formObj[key].initialValue;
+    }
   }
 
   return (
