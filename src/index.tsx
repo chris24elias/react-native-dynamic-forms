@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { Layout, Button, Text } from "@ui-kitten/components";
 import { Formik, FormikProps } from "formik";
@@ -31,6 +31,8 @@ interface DynamicFormProps {
   formikProps?: any;
   showsVerticalScrollIndicator?: boolean;
   submitButtonText?: string;
+  renderSubmitButton?: any;
+  errors?: any;
 }
 
 const DynamicForm = ({
@@ -45,10 +47,20 @@ const DynamicForm = ({
   scrollViewProps = {},
   formikProps,
   showsVerticalScrollIndicator = false,
-  submitButtonText = "Submit"
+  submitButtonText = "Submit",
+  renderSubmitButton,
+  errors
 }: DynamicFormProps) => {
   const refs = [];
   let textFieldKeys = [];
+
+  const [setFieldErrorsRef, setSetFieldErrorsRef] = useState(null);
+
+  useEffect(() => {
+    if (errors) {
+      setFieldErrorsRef(errors);
+    }
+  }, [errors]);
 
   function renderForm(form, props: FormikProps<any>) {
     if (!form) {
@@ -253,6 +265,22 @@ const DynamicForm = ({
     });
   }
 
+  function renderSubmit(isValid, handleSubmit) {
+    if (renderSubmitButton) {
+      return renderSubmitButton(isValid, handleSubmit);
+    }
+    return (
+      <Button
+        style={[{ marginTop: 5 }, submitButtonStyle]}
+        textStyle={submitButtonTextStyle}
+        disabled={!isValid}
+        onPress={() => handleSubmit()}
+      >
+        {submitButtonText}
+      </Button>
+    );
+  }
+
   return (
     <Formik
       validationSchema={schema}
@@ -261,6 +289,10 @@ const DynamicForm = ({
       {...formikProps}
     >
       {props => {
+        if (!setFieldErrorsRef) {
+          setSetFieldErrorsRef(props.setErrors);
+        }
+
         return (
           <Layout style={[{ flex: 1, padding: 15 }, containerStyle]}>
             <KeyboardAwareScrollView
@@ -270,14 +302,7 @@ const DynamicForm = ({
             >
               {renderForm(masterForm, props)}
               {renderErrors(props.errors)}
-              <Button
-                style={[{ marginTop: 5 }, submitButtonStyle]}
-                textStyle={submitButtonTextStyle}
-                disabled={!props.isValid}
-                onPress={() => props.handleSubmit()}
-              >
-                {submitButtonText}
-              </Button>
+              {renderSubmit(props.isValid, props.handleSubmit)}
             </KeyboardAwareScrollView>
           </Layout>
         );
