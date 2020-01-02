@@ -34,6 +34,7 @@ interface DynamicFormProps {
   renderSubmitButton?: (isValid: boolean, handleSubmit: any) => any;
   renderHeader?: (props: FormikProps<any>) => any;
   initialValues?: any;
+  onFormUpdate: (props: FormikProps<any>) => any;
 }
 
 const DynamicForm = ({
@@ -51,7 +52,8 @@ const DynamicForm = ({
   showsVerticalScrollIndicator = false,
   submitButtonText = "Submit",
   renderSubmitButton,
-  renderHeader
+  renderHeader,
+  onFormUpdate
 }: DynamicFormProps) => {
   const refs = [];
   let textFieldKeys = [];
@@ -290,6 +292,10 @@ const DynamicForm = ({
       {...formikProps}
     >
       {props => {
+        if (onFormUpdate) {
+          onFormUpdate(props);
+        }
+
         return (
           <Fragment>
             {renderHeaderComponent(props)}
