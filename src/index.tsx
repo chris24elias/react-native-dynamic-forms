@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import { View } from "react-native";
 import { Layout, Button, Text } from "@ui-kitten/components";
 import { Formik, FormikProps } from "formik";
@@ -31,13 +31,15 @@ interface DynamicFormProps {
   formikProps?: any;
   showsVerticalScrollIndicator?: boolean;
   submitButtonText?: string;
-  renderSubmitButton?: any;
-  errors?: any;
+  renderSubmitButton?: (isValid: boolean, handleSubmit: any) => any;
+  renderHeader?: (props: FormikProps<any>) => any;
+  initialValues?: any;
 }
 
 const DynamicForm = ({
   form: masterForm,
   schema,
+  initialValues = {},
   onSubmit,
   showErrorSummary = false,
   submitButtonStyle = {},
@@ -49,18 +51,10 @@ const DynamicForm = ({
   showsVerticalScrollIndicator = false,
   submitButtonText = "Submit",
   renderSubmitButton,
-  errors
+  renderHeader
 }: DynamicFormProps) => {
   const refs = [];
   let textFieldKeys = [];
-
-  const [setFieldErrorsRef, setSetFieldErrorsRef] = useState(null);
-
-  useEffect(() => {
-    if (errors) {
-      setFieldErrorsRef(errors);
-    }
-  }, [errors]);
 
   function renderForm(form, props: FormikProps<any>) {
     if (!form) {
@@ -234,38 +228,44 @@ const DynamicForm = ({
     return null;
   }
 
-  function onsubmit(values) {
+  function onsubmit(values, formikActions) {
     if (onSubmit) {
-      onSubmit(values);
+      onSubmit(values, formikActions);
     }
   }
 
   function getInitialValues(form) {
-    const initialValues = {};
-    getInitialValuesHelper(form, initialValues);
-    return initialValues;
+    const initialValuesObj = {};
+    getInitialValuesHelper(form, initialValuesObj);
+    return initialValuesObj;
   }
 
-  function getInitialValuesHelper(form, initialValues) {
+  function getInitialValuesHelper(form, initialValuesObj) {
     Object.keys(form).forEach(key => {
       const field: Field = form[key];
       const { type, initialValue } = field;
+
+      let value = initialValue;
+
+      if (initialValues[key] != undefined) {
+        value = initialValues[key];
+      }
       if (type == "fieldSection") {
         // do something
-        getInitialValuesHelper(field.fields, initialValues);
+        getInitialValuesHelper(field.fields, initialValuesObj);
       } else if (type == "selectField") {
         if (initialValue) {
-          initialValues[key] = { text: initialValue };
+          initialValuesObj[key] = { text: value };
         } else {
-          initialValues[key] = initialValue;
+          initialValuesObj[key] = value;
         }
       } else {
-        initialValues[key] = initialValue;
+        initialValuesObj[key] = value;
       }
     });
   }
 
-  function renderSubmit(isValid, handleSubmit) {
+  function renderSubmit(isValid, handleSubmit, setErrors) {
     if (renderSubmitButton) {
       return renderSubmitButton(isValid, handleSubmit);
     }
@@ -281,6 +281,12 @@ const DynamicForm = ({
     );
   }
 
+  function renderHeaderComponent(props) {
+    if (renderHeader) {
+      return renderHeader(props);
+    }
+  }
+
   return (
     <Formik
       validationSchema={schema}
@@ -289,22 +295,21 @@ const DynamicForm = ({
       {...formikProps}
     >
       {props => {
-        if (!setFieldErrorsRef) {
-          setSetFieldErrorsRef(props.setErrors);
-        }
-
         return (
-          <Layout style={[{ flex: 1, padding: 15 }, containerStyle]}>
-            <KeyboardAwareScrollView
-              showsVerticalScrollIndicator={showsVerticalScrollIndicator}
-              contentContainerStyle={contentContainerStyle}
-              {...scrollViewProps}
-            >
-              {renderForm(masterForm, props)}
-              {renderErrors(props.errors)}
-              {renderSubmit(props.isValid, props.handleSubmit)}
-            </KeyboardAwareScrollView>
-          </Layout>
+          <Fragment>
+            {renderHeaderComponent(props)}
+            <Layout style={[{ flex: 1, padding: 15 }, containerStyle]}>
+              <KeyboardAwareScrollView
+                showsVerticalScrollIndicator={showsVerticalScrollIndicator}
+                contentContainerStyle={contentContainerStyle}
+                {...scrollViewProps}
+              >
+                {renderForm(masterForm, props)}
+                {renderErrors(props.errors)}
+                {renderSubmit(props.isValid, props.handleSubmit, props.setErrors)}
+              </KeyboardAwareScrollView>
+            </Layout>
+          </Fragment>
         );
       }}
     </Formik>
