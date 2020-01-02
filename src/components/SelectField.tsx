@@ -8,7 +8,7 @@ const SelectField = ({ data, value, setValue, title, placeholder, error, multiSe
     <View style={styles.fieldContainer}>
       <Select
         data={data}
-        selectedOption={value}
+        selectedOption={value ? { text: value } : null}
         onSelect={val => {
           if (multiSelect) {
             setValue(val);

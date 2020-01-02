@@ -254,12 +254,6 @@ const DynamicForm = ({
       if (type == "fieldSection") {
         // do something
         getInitialValuesHelper(field.fields, initialValuesObj);
-      } else if (type == "selectField") {
-        if (initialValue) {
-          initialValuesObj[key] = { text: value };
-        } else {
-          initialValuesObj[key] = value;
-        }
       } else {
         initialValuesObj[key] = value;
       }
