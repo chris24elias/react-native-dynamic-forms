@@ -1,7 +1,7 @@
-import React from 'react';
-import {View} from 'react-native';
-import {Input, Icon} from '@ui-kitten/components';
-import styles from '../constants/styles';
+import React from "react";
+import { View } from "react-native";
+import { Input, Icon } from "@ui-kitten/components";
+import styles from "../constants/styles";
 
 const TextField = ({
   value,
@@ -14,13 +14,12 @@ const TextField = ({
   textFieldIndex,
   returnKeyLabel,
   secure,
+  multiline,
   ...otherProps
 }) => {
   const [secureTextEntry, setSecureTextEntry] = React.useState(secure);
 
-  const renderIcon = style => (
-    <Icon {...style} name={secureTextEntry ? 'eye-off' : 'eye'} />
-  );
+  const renderIcon = style => <Icon {...style} name={secureTextEntry ? "eye-off" : "eye"} />;
 
   const onIconPress = () => {
     setSecureTextEntry(!secureTextEntry);
@@ -34,15 +33,20 @@ const TextField = ({
         onChangeText={text => setValue(text)}
         style={{}}
         label={title}
-        status={error ? 'danger' : value ? 'success' : 'basic'}
+        status={error ? "danger" : value ? "success" : "basic"}
         caption={error}
         ref={getRef}
-        onSubmitEditing={() => onSubmitEditing(textFieldIndex)}
+        onSubmitEditing={() => {
+          if (!multiline) {
+            onSubmitEditing(textFieldIndex);
+          }
+        }}
         // returnKeyLabel={""}
-        returnKeyType={returnKeyLabel == 'Next' ? 'next' : 'default'}
+        returnKeyType={!multiline && returnKeyLabel == "Next" ? "next" : "default"}
         secureTextEntry={secureTextEntry}
         icon={secure ? renderIcon : null}
         onIconPress={onIconPress}
+        multiline={multiline}
         {...otherProps}
       />
     </View>
