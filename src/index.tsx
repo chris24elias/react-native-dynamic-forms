@@ -85,7 +85,8 @@ const DynamicForm = ({
         },
         title: title,
         placeholder,
-        data: options
+        data: options,
+        setFieldValue
       };
 
       if (type == "custom" && field.component) {

@@ -1,25 +1,23 @@
-import React, {Component, Fragment} from 'react';
-import {View, Modal, TouchableOpacity} from 'react-native';
-import {Input, Icon, Text, styled, Button} from '@ui-kitten/components';
-import styles from '../constants/styles';
-import {FieldComponentProps} from '../constants/interfaces';
-import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
-import {Overlay, SearchBar} from 'react-native-elements';
-import {Header, Left, Body, Right} from 'native-base';
-import {normalizeStyle, normalizeTextStyle} from '../constants/functions';
+import React, { Component, Fragment } from "react";
+import { View, Modal, TouchableOpacity } from "react-native";
+import { Input, Icon, Text, styled, Button } from "@ui-kitten/components";
+import styles from "../constants/styles";
+import { FieldComponentProps } from "../constants/interfaces";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { Overlay, SearchBar } from "react-native-elements";
+import { Header, Left, Body, Right } from "native-base";
+import { normalizeStyle, normalizeTextStyle } from "../constants/functions";
 
 interface AutoCompleteAddressFieldProps extends FieldComponentProps {
   apiKey: string;
   style: any;
   themedStyle: any;
 }
-class AutoCompleteAddressField extends Component<
-  AutoCompleteAddressFieldProps
-> {
-  static styledComponentName = 'Input';
+class AutoCompleteAddressField extends Component<AutoCompleteAddressFieldProps> {
+  static styledComponentName = "Input";
 
   state = {
-    modalVisible: false,
+    modalVisible: false
   };
   // const AutoCompleteAddressField = ({
   //   value,
@@ -55,10 +53,12 @@ class AutoCompleteAddressField extends Component<
       textFieldIndex,
       returnKeyLabel,
       secure,
+      onAddressPress,
+      setFieldValue,
       ...otherProps
     } = this.props;
 
-    const {style, themedStyle, ...restProps} = this.props;
+    const { style, themedStyle, ...restProps } = this.props;
     const {
       labelMarginBottom,
       labelFontSize,
@@ -75,7 +75,7 @@ class AutoCompleteAddressField extends Component<
       captionIconWidth,
       captionIconHeight,
       captionIconMarginRight,
-      captionIconTintColor,
+      captionIconTintColor
     } = themedStyle;
 
     const textStyle = {
@@ -84,7 +84,7 @@ class AutoCompleteAddressField extends Component<
       fontWeight: labelFontWeight,
       lineHeight: labelLineHeight,
       fontFamily: labelFontFamily,
-      color: labelColor,
+      color: labelColor
     };
 
     const captionStyle = {
@@ -93,7 +93,7 @@ class AutoCompleteAddressField extends Component<
       fontWeight: captionFontWeight,
       lineHeight: captionLineHeight,
       fontFamily: captionFontFamily,
-      color: captionColor,
+      color: captionColor
       //   captionIconWidth,
       //   captionIconHeight,
       //   captionIconMarginRight,
@@ -105,18 +105,20 @@ class AutoCompleteAddressField extends Component<
         <Modal
           visible={this.state.modalVisible}
           animationType="slide"
-          onDismiss={() => console.log('dismissed')}
-          animated>
-          <View style={{flex: 1, paddingBottom: '3%'}}>
+          onDismiss={() => console.log("dismissed")}
+          animated
+        >
+          <View style={{ flex: 1, paddingBottom: "3%" }}>
             <Header>
               <Left>
                 <TouchableOpacity
                   style={{
                     flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    justifyContent: "center",
+                    alignItems: "center"
                   }}
-                  onPress={() => this.setState({modalVisible: false})}>
+                  onPress={() => this.setState({ modalVisible: false })}
+                >
                   <Icon name="close-outline" width={25} height={25} />
                 </TouchableOpacity>
               </Left>
@@ -128,49 +130,50 @@ class AutoCompleteAddressField extends Component<
             <GooglePlacesAutocomplete
               placeholder="Enter Location"
               minLength={2}
-              autoFocus={false}
-              returnKeyType={'default'}
+              autoFocus={true}
+              returnKeyType={"default"}
               fetchDetails={true}
               nearbyPlacesAPI="GooglePlacesSearch"
-              autoFocus={true}
-              currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
-              currentLocationLabel="Current location"
+              // currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
+              // currentLocationLabel="Current location"
               query={{
                 key: this.props.apiKey,
-                language: 'en', // language of the results
+                language: "en" // language of the results
                 // types: "(cities)" // default: 'geocode'
               }}
               styles={{
                 textInputContainer: {
-                  backgroundColor: 'rgba(0,0,0,0)',
+                  backgroundColor: "rgba(0,0,0,0)",
                   borderTopWidth: 0,
-                  borderBottomWidth: 0,
+                  borderBottomWidth: 0
                 },
                 textInput: {
-                  ...normalizeStyle(themedStyle, style),
+                  ...normalizeStyle(themedStyle, style)
                 },
                 predefinedPlacesDescription: {
-                  color: '#1faadb',
+                  color: "#1faadb"
                 },
                 listView: {
-                  marginTop: 10,
-                },
+                  marginTop: 10
+                }
               }}
-              currentLocation={false}
               onPress={(data, details = null) => {
                 // 'details' is provided when fetchDetails = true
                 // console.log(data, details);
                 // parseGooglePlacesAddressObj(details);
-                console.log('DATA', data, details);
-                setValue(data.description);
+                console.log("DATA", data, details);
+                if (onAddressPress) {
+                  onAddressPress(data, details, setFieldValue);
+                } else {
+                  setValue(data.description);
+                }
               }}
               getDefaultValue={() => value}
               enablePoweredByContainer={false}
+              // {...restProps}
             />
-            <View style={{padding: 15}}>
-              <Button onPress={() => this.setState({modalVisible: false})}>
-                Done
-              </Button>
+            <View style={{ padding: 15 }}>
+              <Button onPress={() => this.setState({ modalVisible: false })}>Done</Button>
             </View>
           </View>
         </Modal>
@@ -181,10 +184,10 @@ class AutoCompleteAddressField extends Component<
             value={value}
             // onChangeText={text => setValue(text)}
             label={title}
-            status={error ? 'danger' : value ? 'success' : 'basic'}
+            status={error ? "danger" : value ? "success" : "basic"}
             caption={error}
             {...otherProps}
-            onFocus={() => this.setState({modalVisible: true})}
+            onFocus={() => this.setState({ modalVisible: true })}
           />
         </View>
       </Fragment>
