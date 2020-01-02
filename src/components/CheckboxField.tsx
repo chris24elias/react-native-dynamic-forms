@@ -1,14 +1,7 @@
-import React from 'react';
-import {
-  Input,
-  Select,
-  Layout,
-  Button,
-  Text,
-  CheckBox,
-} from '@ui-kitten/components';
-import {View} from 'react-native';
-import styles from '../constants/styles';
+import React from "react";
+import { Input, Select, Layout, Button, Text, CheckBox } from "@ui-kitten/components";
+import { View } from "react-native";
+import styles from "../constants/styles";
 
 interface CheckboxFieldProps {
   value: boolean;
@@ -17,13 +10,7 @@ interface CheckboxFieldProps {
   error: any;
 }
 
-const CheckboxField = ({
-  value,
-  setValue,
-  title,
-  error,
-  ...otherProps
-}: CheckboxFieldProps) => {
+const CheckboxField = ({ value, setValue, title, error, ...otherProps }: CheckboxFieldProps) => {
   return (
     <View style={styles.fieldContainer}>
       <CheckBox
@@ -32,21 +19,21 @@ const CheckboxField = ({
         onChange={isChecked => {
           setValue(isChecked);
         }}
-        status={error ? 'danger' : value ? 'success' : 'basic'}
+        status={error ? "danger" : value ? "success" : "basic"}
         {...otherProps}
       />
       <Text
         appearance="hint"
         category="label"
-        status={error ? 'danger' : value ? 'success' : 'basic'}
+        status={error ? "danger" : value ? "success" : "basic"}
         style={{
           marginTop: 5,
-          fontWeight: '400',
+          fontWeight: "400",
           fontSize: 12,
           lineHeight: 16,
-          color: '#bf0039',
-          fontFamily: 'System',
-        }}>
+          fontFamily: "System"
+        }}
+      >
         {error}
       </Text>
     </View>

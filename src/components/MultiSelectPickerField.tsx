@@ -1,18 +1,12 @@
-import React, {useState, useRef, useEffect, Component} from 'react';
-import {
-  View,
-  StyleSheet,
-  Modal,
-  TouchableOpacity,
-  ActivityIndicator,
-} from 'react-native';
-import SectionedMultiSelect from 'react-native-sectioned-multi-select';
-import {Header, Body, Title, Left, Right} from 'native-base';
-import {FieldComponentProps, Option} from '../constants/interfaces';
-import styles from '../constants/styles';
-import {styled, Interaction, Text} from '@ui-kitten/components';
-import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../constants';
-import {normalizeStyle, normalizeTextStyle} from '../constants/functions';
+import React, { useState, useRef, useEffect, Component } from "react";
+import { View, StyleSheet, Modal, TouchableOpacity, ActivityIndicator } from "react-native";
+import SectionedMultiSelect from "react-native-sectioned-multi-select";
+import { Header, Body, Title, Left, Right } from "native-base";
+import { FieldComponentProps, Option } from "../constants/interfaces";
+import styles from "../constants/styles";
+import { styled, Interaction, Text } from "@ui-kitten/components";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../constants";
+import { normalizeStyle, normalizeTextStyle } from "../constants/functions";
 
 interface MultiSelectPickerFieldProps extends FieldComponentProps {
   data: Option[];
@@ -20,11 +14,11 @@ interface MultiSelectPickerFieldProps extends FieldComponentProps {
   themedStyle: any;
 }
 class MultiSelectPickerField extends Component<MultiSelectPickerFieldProps> {
-  static styledComponentName = 'Input';
+  static styledComponentName = "Input";
 
   render() {
-    const {error, setValue, title, value, placeholder, data} = this.props;
-    const {style, themedStyle, ...restProps} = this.props;
+    const { error, setValue, title, value, placeholder, data } = this.props;
+    const { style, themedStyle, ...restProps } = this.props;
     const {
       labelMarginBottom,
       labelFontSize,
@@ -41,7 +35,7 @@ class MultiSelectPickerField extends Component<MultiSelectPickerFieldProps> {
       captionIconWidth,
       captionIconHeight,
       captionIconMarginRight,
-      captionIconTintColor,
+      captionIconTintColor
     } = themedStyle;
 
     const textStyle = {
@@ -50,7 +44,7 @@ class MultiSelectPickerField extends Component<MultiSelectPickerFieldProps> {
       fontWeight: labelFontWeight,
       lineHeight: labelLineHeight,
       fontFamily: labelFontFamily,
-      color: labelColor,
+      color: labelColor
     };
 
     const captionStyle = {
@@ -59,7 +53,7 @@ class MultiSelectPickerField extends Component<MultiSelectPickerFieldProps> {
       fontWeight: captionFontWeight,
       lineHeight: captionLineHeight,
       fontFamily: captionFontFamily,
-      color: captionColor,
+      color: captionColor
       //   captionIconWidth,
       //   captionIconHeight,
       //   captionIconMarginRight,
@@ -71,72 +65,43 @@ class MultiSelectPickerField extends Component<MultiSelectPickerFieldProps> {
         <SectionedMultiSelect
           // modalWithSafeAreaView
           // ref={multiSelect}
-          items={data}
+          items={data && Array.isArray(data) ? data : []}
           uniqueKey="value"
-          // subKey="children"
+          // subKey="children"d
           selectText={title}
           // showDropDowns={true}
           // readOnlyHeadings={true}
           onSelectedItemsChange={selectedItems => setValue(selectedItems)}
-          selectedItems={value}
+          selectedItems={value && Array.isArray(value) ? value : []}
           alwaysShowSelectText
           searchPlaceholderText={placeholder}
-          modalAnimationType={'slide'}
+          modalAnimationType={"slide"}
           renderSelectText={() => {
             return (
-              <View style={{flex: 1, marginBottom: 5}}>
-                <Text style={normalizeTextStyle(themedStyle, style)}>
-                  {placeholder}
-                </Text>
+              <View style={{ flex: 1, marginBottom: 5 }}>
+                <Text style={normalizeTextStyle(themedStyle, style)}>{placeholder}</Text>
               </View>
             );
           }}
           headerComponent={() => (
             <Header>
               <Left />
-              <Body style={{flex: 3}}>
+              <Body style={{ flex: 3 }}>
                 <Title>{title}</Title>
               </Body>
               <Right></Right>
             </Header>
           )}
-          // styles={{
-          //   modalWrapper: {
-          //     // height: SCREEN_HEIGHT,
-          //     // width: SCREEN_WIDTH,
-          //     backgroundColor: 'white',
-          //     flex: 1,
-          //   },
-          //   // listContainer: {
-          //   //   flex: 1,
-          //   //   height: SCREEN_HEIGHT,
-          //   //   width: SCREEN_WIDTH,
-          //   // // },
-          //   // container: {
-          //   //   flex: 1,
-          //   // },
-          //   button: {
-          //     width: '90%',
-          //     borderRadius: 10,
-          //     alignSelf: 'center',
-          //     marginTop: 25,
-          //   },
-          //   selectToggle: {
-          //     marginBottom: 5,
-          //     ...normalizeStyle(themedStyle, style),
-          //   },
-          //   selectToggleText: normalizeTextStyle(themedStyle, style),
-          // }}
           styles={{
             modalWrapper: {
               height: SCREEN_HEIGHT,
               width: SCREEN_WIDTH,
-              backgroundColor: 'white',
+              backgroundColor: "white"
             },
             listContainer: {
               flex: 1,
               height: SCREEN_HEIGHT,
-              width: SCREEN_WIDTH,
+              width: SCREEN_WIDTH
             },
             container: {
               flex: 1,
@@ -144,20 +109,21 @@ class MultiSelectPickerField extends Component<MultiSelectPickerFieldProps> {
               // width: deviceWidth
               marginHorizontal: 0,
               marginVertical: 0,
-              paddingBottom: '5%',
+              paddingBottom: "5%"
             },
             button: {
-              width: '90%',
+              width: "90%",
               borderRadius: 10,
-              alignSelf: 'center',
-              marginTop: 25,
+              alignSelf: "center",
+              marginTop: 25
             },
             selectToggle: {
               marginBottom: 5,
-              ...normalizeStyle(themedStyle, style),
+              ...normalizeStyle(themedStyle, style)
             },
-            selectToggleText: normalizeTextStyle(themedStyle, style),
+            selectToggleText: normalizeTextStyle(themedStyle, style)
           }}
+          {...restProps}
         />
         {error && <Text style={captionStyle}>{error}</Text>}
       </View>
