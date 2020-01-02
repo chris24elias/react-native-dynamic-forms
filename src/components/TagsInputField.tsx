@@ -98,4 +98,4 @@ const TagsInputField = ({
   );
 };
 
-export default TagsInputField;
+export default React.memo(TagsInputField);

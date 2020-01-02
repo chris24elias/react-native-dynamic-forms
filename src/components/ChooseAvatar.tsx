@@ -105,4 +105,4 @@ const ChooseAvatar = ({
   );
 };
 
-export default ChooseAvatar;
+export default React.memo(ChooseAvatar);

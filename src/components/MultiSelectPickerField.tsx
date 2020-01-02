@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, Component } from "react";
+import React, { useState, useRef, useEffect, Component, PureComponent } from "react";
 import { View, StyleSheet, Modal, TouchableOpacity, ActivityIndicator } from "react-native";
 import SectionedMultiSelect from "react-native-sectioned-multi-select";
 import { Header, Body, Title, Left, Right } from "native-base";
@@ -13,7 +13,7 @@ interface MultiSelectPickerFieldProps extends FieldComponentProps {
   style: any;
   themedStyle: any;
 }
-class MultiSelectPickerField extends Component<MultiSelectPickerFieldProps> {
+class MultiSelectPickerField extends PureComponent<MultiSelectPickerFieldProps> {
   static styledComponentName = "Input";
 
   render() {

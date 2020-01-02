@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from "react";
+import React, { Component, useEffect, PureComponent } from "react";
 import { Picker } from "native-base";
 import { View, StyleSheet, ActivityIndicator } from "react-native";
 import { Icon } from "native-base";
@@ -13,7 +13,7 @@ interface PickerFieldProps extends FieldComponentProps {
   themedStyle: any;
 }
 
-class PickerField extends Component<PickerFieldProps> {
+class PickerField extends PureComponent<PickerFieldProps> {
   static styledComponentName = "Input";
 
   render() {

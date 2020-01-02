@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragment, PureComponent } from "react";
 import { View, Modal, TouchableOpacity } from "react-native";
 import { Input, Icon, Text, styled, Button } from "@ui-kitten/components";
 import styles from "../constants/styles";
@@ -13,7 +13,7 @@ interface AutoCompleteAddressFieldProps extends FieldComponentProps {
   style: any;
   themedStyle: any;
 }
-class AutoCompleteAddressField extends Component<AutoCompleteAddressFieldProps> {
+class AutoCompleteAddressField extends PureComponent<AutoCompleteAddressFieldProps> {
   static styledComponentName = "Input";
 
   state = {

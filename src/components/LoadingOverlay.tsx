@@ -1,12 +1,12 @@
-import React from 'react';
-import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
-import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../constants';
+import React from "react";
+import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../constants";
 
 interface LoadingOverlayProps {
   visible: boolean;
 }
 
-const LoadingOverlay = ({visible}: LoadingOverlayProps) => {
+const LoadingOverlay = ({ visible }: LoadingOverlayProps) => {
   if (!visible) {
     return null;
   }
@@ -16,13 +16,14 @@ const LoadingOverlay = ({visible}: LoadingOverlayProps) => {
       style={{
         height: SCREEN_HEIGHT,
         width: SCREEN_WIDTH,
-        position: 'absolute',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0,0,0,0.5)',
+        position: "absolute",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "rgba(0,0,0,0.5)",
         zIndex: 100,
-        elevation: 100,
-      }}>
+        elevation: 100
+      }}
+    >
       <ActivityIndicator size="large" />
     </View>
   );
@@ -30,7 +31,7 @@ const LoadingOverlay = ({visible}: LoadingOverlayProps) => {
 
 const styles = StyleSheet.create({});
 
-export default LoadingOverlay;
+export default React.memo(LoadingOverlay);
 
 // import React from "React";
 // import { View, ActivityIndicator, StyleSheet } from "react-native";
