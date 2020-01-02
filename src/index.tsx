@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Fragment } from "react";
-import { View } from "react-native";
+import { View, Keyboard } from "react-native";
 import { Layout, Button, Text } from "@ui-kitten/components";
 import { Formik, FormikProps } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -55,24 +55,25 @@ const DynamicForm = ({
 }: DynamicFormProps) => {
   const refs = [];
   let textFieldKeys = [];
+  let textFieldCount = 0;
+  let allFieldsCount = 0;
 
   function renderForm(form, props: FormikProps<any>) {
     if (!form) {
       return null;
     }
 
-    let textFieldCount = 0;
-    textFieldKeys = [];
     let fields = Object.keys(form);
-    return renderFields(form, fields, props, { textFieldCount, textFieldKeys });
+    return renderFields(form, fields, props);
   }
 
-  function renderFields(form, fields, formikProps, { textFieldCount, textFieldKeys }) {
+  function renderFields(form, fields, formikProps) {
     const { values, errors, handleSubmit, setFieldValue } = formikProps;
 
     return fields.map((key, index) => {
       const field = form[key];
       const name = key;
+      allFieldsCount++;
       const { type, placeholder, title, options, initialValue, ...otherProps } = field;
 
       const sharedFieldProps = {
@@ -103,14 +104,13 @@ const DynamicForm = ({
           extraProps = {
             textFieldIndex: textFieldCount,
             getRef: ref => (refs[index] = ref),
-            returnKeyLabel: index == fields.length - 1 ? "Submit" : "Next",
+            returnKeyLabel: "Next",
             onSubmitEditing: keyIndex => {
-              if (index < fields.length - 1) {
-                if (refs[textFieldKeys[keyIndex]]) {
-                  refs[textFieldKeys[keyIndex]].focus();
-                }
+              if (refs[textFieldKeys[keyIndex]]) {
+                refs[textFieldKeys[keyIndex]].focus();
               } else {
-                handleSubmit();
+                // handleSubmit();
+                Keyboard.dismiss();
               }
             }
           };
@@ -303,6 +303,9 @@ const DynamicForm = ({
               <KeyboardAwareScrollView
                 showsVerticalScrollIndicator={showsVerticalScrollIndicator}
                 contentContainerStyle={contentContainerStyle}
+                enableResetScrollToCoords={false}
+                extraScrollHeight={50}
+                extraHeight={100}
                 {...scrollViewProps}
               >
                 {renderForm(masterForm, props)}
