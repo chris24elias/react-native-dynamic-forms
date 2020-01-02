@@ -86,7 +86,17 @@ const ChooseAvatar = ({
         // onEditPress={onEditPress}
         onPress={onEditPress}
         size={size ? (size.height ? size.height : size) : "medium"}
-        style={[size, style]}
+        style={[
+          size,
+          {
+            shadowColor: "#9b9b9b",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.7,
+            shadowRadius: 2,
+            elevation: 1
+          },
+          style
+        ]}
         {...otherProps}
         // containerStyle={{marginBottom: 20}}
       />

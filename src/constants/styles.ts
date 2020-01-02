@@ -1,51 +1,47 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   center: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center"
   },
   fieldContainer: {
     // flex: 1,
     marginBottom: 15,
     flex: 1,
-    flexDirection: 'column',
+    flexDirection: "column"
   },
   radio: {
-    marginVertical: 8,
+    marginVertical: 8
   },
   tagsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     flex: 0,
-    alignItems: 'center',
+    alignItems: "center"
   },
   tagCloseIcon: {
-    top: '0%',
-    right: '-10%',
-    position: 'absolute',
+    top: "0%",
+    right: "-10%",
+    position: "absolute"
   },
   tagText: {
     fontSize: 17,
     lineHeight: 18,
     top: 1.5,
-    // color: color.deepLavender,
-    marginRight: 2,
+    marginRight: 2
   },
   tag: {
-    backgroundColor: '#EFDEF9',
+    backgroundColor: "#EFDEF9",
     padding: 7,
-    borderRadius: 4,
+    borderRadius: 4
   },
   tagContainer: {
     height: 50,
     marginRight: 10,
-    flexDirection: 'row',
-    // borderWidth: 1,
-    // borderColor: color.deepLavender,
-
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
+  }
 });
 
 export default styles;

@@ -1,11 +1,11 @@
-import React, {Component, useEffect} from 'react';
-import {Picker} from 'native-base';
-import {View, StyleSheet, ActivityIndicator} from 'react-native';
-import {Icon} from 'native-base';
-import styles from '../constants/styles';
-import {FieldComponentProps, Option} from '../constants/interfaces';
-import {styled, Interaction, Text} from '@ui-kitten/components';
-import {normalizeStyle, normalizeTextStyle} from '../constants/functions';
+import React, { Component, useEffect } from "react";
+import { Picker } from "native-base";
+import { View, StyleSheet, ActivityIndicator } from "react-native";
+import { Icon } from "native-base";
+import styles from "../constants/styles";
+import { FieldComponentProps, Option } from "../constants/interfaces";
+import { styled, Interaction, Text } from "@ui-kitten/components";
+import { normalizeStyle, normalizeTextStyle } from "../constants/functions";
 
 interface PickerFieldProps extends FieldComponentProps {
   data: Option[];
@@ -14,11 +14,11 @@ interface PickerFieldProps extends FieldComponentProps {
 }
 
 class PickerField extends Component<PickerFieldProps> {
-  static styledComponentName = 'Input';
+  static styledComponentName = "Input";
 
   render() {
-    const {placeholder, error, value, setValue, title, data} = this.props;
-    const {style, themedStyle, ...restProps} = this.props;
+    const { placeholder, error, value, setValue, title, data } = this.props;
+    const { style, themedStyle, ...restProps } = this.props;
     const {
       labelMarginBottom,
       labelFontSize,
@@ -35,7 +35,7 @@ class PickerField extends Component<PickerFieldProps> {
       captionIconWidth,
       captionIconHeight,
       captionIconMarginRight,
-      captionIconTintColor,
+      captionIconTintColor
     } = themedStyle;
 
     const textStyle = {
@@ -44,7 +44,7 @@ class PickerField extends Component<PickerFieldProps> {
       fontWeight: labelFontWeight,
       lineHeight: labelLineHeight,
       fontFamily: labelFontFamily,
-      color: labelColor,
+      color: labelColor
     };
 
     const captionStyle = {
@@ -53,7 +53,7 @@ class PickerField extends Component<PickerFieldProps> {
       fontWeight: captionFontWeight,
       lineHeight: captionLineHeight,
       fontFamily: captionFontFamily,
-      color: captionColor,
+      color: captionColor
       //   captionIconWidth,
       //   captionIconHeight,
       //   captionIconMarginRight,
@@ -71,7 +71,8 @@ class PickerField extends Component<PickerFieldProps> {
           selectedValue={value}
           onValueChange={val => setValue(val)}
           // style={styles.pickerStyles}
-          style={normalizeStyle(themedStyle, style)}>
+          style={[normalizeStyle(themedStyle, style), { paddingLeft: 0 }]}
+        >
           {data.map((s, i) => (
             <Picker.Item label={s.label} key={i} value={s.value} />
           ))}

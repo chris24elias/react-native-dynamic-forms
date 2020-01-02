@@ -1,11 +1,16 @@
-import React, {useState, useEffect} from 'react';
-import {View, TouchableOpacity, Image} from 'react-native';
-import {Input, Icon, Text} from '@ui-kitten/components';
-import styles from '../constants/styles';
-import {FieldComponentProps} from '../constants/interfaces';
+import React, { useState, useEffect } from "react";
+import { View, TouchableOpacity, Image } from "react-native";
+import { Input, Text } from "@ui-kitten/components";
+import styles from "../constants/styles";
+import { FieldComponentProps } from "../constants/interfaces";
+import { Icon } from "native-base";
 
 interface TagsInputFieldProps extends FieldComponentProps {
   value: string[];
+  tagTextStyle: any;
+  tagContainerStyle: any;
+  tagIconStyle: any;
+  renderCloseIcon: any;
 }
 
 const TagsInputField = ({
@@ -14,8 +19,12 @@ const TagsInputField = ({
   title,
   value,
   placeholder,
+  tagContainerStyle,
+  tagIconStyle,
+  tagTextStyle,
+  renderCloseIcon
 }: TagsInputFieldProps) => {
-  const [inputText, setInputText] = useState('');
+  const [inputText, setInputText] = useState("");
 
   function removeTag(index) {
     let tagsCopy = value.slice(0);
@@ -28,33 +37,37 @@ const TagsInputField = ({
     let newArr = [
       ...value,
       text
-        .replace(',', '')
-        .replace('#', '')
-        .trim(),
+        .replace(",", "")
+        .replace("#", "")
+        .trim()
     ];
-    setInputText('');
+    setInputText("");
     setValue(newArr, false);
   }
 
   function renderTags() {
-    if (!value) {
+    if (!value || !Array.isArray(value)) {
       return null;
     }
 
     return value.map((tag, index) => {
-      return (
-        <View key={index} style={styles.tagContainer}>
-          <View style={styles.tag}>
-            <Text style={styles.tagText}>{tag}</Text>
-          </View>
+      if (tag) {
+        return (
+          <View key={index} style={[styles.tagContainer, tagContainerStyle]}>
+            <View style={styles.tag}>
+              <Text style={[styles.tagText, tagTextStyle]}>{tag}</Text>
+            </View>
 
-          <TouchableOpacity
-            onPress={() => removeTag(index)}
-            style={styles.tagCloseIcon}>
-            <Icon name={'close-circle-outline'} width={17} height={17} />
-          </TouchableOpacity>
-        </View>
-      );
+            <TouchableOpacity onPress={() => removeTag(index)} style={[styles.tagCloseIcon]}>
+              {renderCloseIcon ? (
+                renderCloseIcon()
+              ) : (
+                <Icon name={"ios-close-circle"} type="Ionicons" style={[{ fontSize: 18 }, tagIconStyle]} />
+              )}
+            </TouchableOpacity>
+          </View>
+        );
+      }
     });
   }
 
@@ -62,16 +75,11 @@ const TagsInputField = ({
     <View style={styles.fieldContainer}>
       <Input
         label={title}
-        placeholder={
-          inputText || (value && value.length > 0) ? '' : placeholder
-        }
+        placeholder={placeholder}
         value={inputText}
         onChangeText={text => {
           // this.props.changePracticeFieldAction({ tags: text })
-          if (
-            text.charAt(text.length - 1) == ',' ||
-            text.charAt(text.length - 1) == ' '
-          ) {
+          if (text.charAt(text.length - 1) == "," || text.charAt(text.length - 1) == " ") {
             addTag(text);
           } else {
             setInputText(text);
