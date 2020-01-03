@@ -79,9 +79,13 @@ const ChooseAvatar = ({
       /> */}
       <Avatar
         // title={title}
-        source={{
-          uri: value
-        }}
+        source={
+          value && typeof value == "string"
+            ? {
+                uri: value
+              }
+            : value
+        }
         // showEditButton
         // onEditPress={onEditPress}
         onPress={onEditPress}
