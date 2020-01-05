@@ -38,7 +38,7 @@ const TagsInputField = ({
       ...value,
       text
         .replace(",", "")
-        .replace("#", "")
+        // .replace("#", "")
         .trim()
     ];
     setInputText("");

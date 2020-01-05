@@ -15,6 +15,7 @@ const TextField = ({
   returnKeyLabel,
   secure,
   multiline,
+  ref, // DONT USE
   ...otherProps
 }) => {
   const [secureTextEntry, setSecureTextEntry] = React.useState(secure);
