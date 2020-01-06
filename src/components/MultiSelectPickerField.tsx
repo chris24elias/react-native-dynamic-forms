@@ -121,8 +121,16 @@ class MultiSelectPickerField extends PureComponent<MultiSelectPickerFieldProps> 
               marginBottom: 5,
               ...normalizeStyle(themedStyle, style)
             },
-            selectToggleText: normalizeTextStyle(themedStyle, style)
+            selectToggleText: normalizeTextStyle(themedStyle, style),
+            searchTextInput: {
+              color: "black"
+            }
           }}
+          colors={
+            {
+              // searchSelectionColor: "black"
+            }
+          }
           {...restProps}
         />
         {error && <Text style={captionStyle}>{error}</Text>}
