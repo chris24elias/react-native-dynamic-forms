@@ -50,7 +50,13 @@ const TextField = ({
           }
         }}
         // returnKeyLabel={""}
-        returnKeyType={!multiline && returnKeyLabel == "Next" ? "next" : "default"}
+        returnKeyType={
+          !multiline && returnKeyLabel == "Next"
+            ? otherProps.keyboardType == "numeric"
+              ? "done"
+              : "next"
+            : "default"
+        }
         secureTextEntry={secureTextEntry}
         icon={secure ? renderIcon : null}
         onIconPress={onIconPress}
