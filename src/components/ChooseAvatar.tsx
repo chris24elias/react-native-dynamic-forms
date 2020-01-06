@@ -83,7 +83,7 @@ const ChooseAvatar = ({
         }}
       >
         {renderComponent ? (
-          renderComponent()
+          renderComponent(value)
         ) : (
           <Avatar
             source={
