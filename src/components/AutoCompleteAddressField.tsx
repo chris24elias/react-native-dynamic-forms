@@ -102,12 +102,7 @@ class AutoCompleteAddressField extends PureComponent<AutoCompleteAddressFieldPro
 
     return (
       <Fragment>
-        <Modal
-          visible={this.state.modalVisible}
-          animationType="slide"
-          onDismiss={() => console.log("dismissed")}
-          animated
-        >
+        <Modal visible={this.state.modalVisible} animationType="slide" onDismiss={() => {}} animated>
           <View style={{ flex: 1, paddingBottom: "3%" }}>
             <Header>
               <Left>
@@ -148,7 +143,8 @@ class AutoCompleteAddressField extends PureComponent<AutoCompleteAddressFieldPro
                   borderBottomWidth: 0
                 },
                 textInput: {
-                  ...normalizeStyle(themedStyle, style)
+                  ...normalizeStyle(themedStyle, style),
+                  color: "black"
                 },
                 predefinedPlacesDescription: {
                   color: "#1faadb"
@@ -157,11 +153,12 @@ class AutoCompleteAddressField extends PureComponent<AutoCompleteAddressFieldPro
                   marginTop: 10
                 }
               }}
+              textInputProps={{
+                onChangeText: text => {
+                  setValue(text);
+                }
+              }}
               onPress={(data, details = null) => {
-                // 'details' is provided when fetchDetails = true
-                // console.log(data, details);
-                // parseGooglePlacesAddressObj(details);
-                console.log("DATA", data, details);
                 if (onAddressPress) {
                   onAddressPress(data, details, setFieldValue);
                 } else {

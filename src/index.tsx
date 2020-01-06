@@ -98,12 +98,7 @@ const DynamicForm = ({
           setFieldValue(name, value, shouldValidate);
         },
         onBlur: e => {
-          console.log("ON BLUR", name);
-          // setTimeout(() => {
-          //   validateField(name);
-          // }, 150);
           setFieldTouched(name, true, true);
-          // validateField(name);
         },
         title: title,
         placeholder,
@@ -314,6 +309,7 @@ const DynamicForm = ({
                 enableResetScrollToCoords={false}
                 extraScrollHeight={50}
                 extraHeight={100}
+                keyboardShouldPersistTaps={"handled"}
                 {...scrollViewProps}
               >
                 {renderForm(masterForm, props)}
