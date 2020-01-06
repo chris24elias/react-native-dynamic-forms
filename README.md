@@ -5,6 +5,10 @@ https://jaredpalmer.com/formik
 
 DOCS STILL UNDER CONSTRUCTION............
 
+todos...
+
+convert all components to styled components...
+
 Follow instructions on their website to set up your application with UI Kitten.
 
 ## Configure Application Root
