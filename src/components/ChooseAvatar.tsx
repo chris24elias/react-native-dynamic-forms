@@ -24,6 +24,10 @@ interface ChooseAvatarProps {
   title: string;
   size: any;
   position: "center";
+  captionStyle: any;
+  caption: string;
+  style: any;
+  renderComponent: any;
 }
 
 const ChooseAvatar = ({
@@ -35,6 +39,7 @@ const ChooseAvatar = ({
   style,
   caption,
   captionStyle,
+  renderComponent,
   ...otherProps
 }: ChooseAvatarProps) => {
   function onEditPress() {
@@ -48,13 +53,13 @@ const ChooseAvatar = ({
       } else if (response.customButton) {
         console.log("User tapped custom button: ", response.customButton);
       } else {
-        const source = { uri: response.uri };
+        const source = { uri: response.uri, type: response.type, ...response };
 
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
         // saveToCameraRoll(source.uri, 'photo');
 
-        setValue(source.uri);
+        setValue(source);
       }
     });
   }
@@ -67,6 +72,34 @@ const ChooseAvatar = ({
 
   return (
     <View style={[styles.fieldContainer, getPosition()]}>
+      <TouchableOpacity
+        onPress={onEditPress}
+        style={{
+          shadowColor: "#9b9b9b",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.7,
+          shadowRadius: 2,
+          elevation: 1
+        }}
+      >
+        {renderComponent ? (
+          renderComponent()
+        ) : (
+          <Avatar
+            source={
+              value && typeof value == "string"
+                ? {
+                    uri: value
+                  }
+                : value
+            }
+            size={size ? (size.height ? size.height : size) : "medium"}
+            style={[size, style]}
+            {...otherProps}
+            // containerStyle={{marginBottom: 20}}
+          />
+        )}
+      </TouchableOpacity>
       {/* <Image
         source={{
           uri: value,
@@ -77,33 +110,7 @@ const ChooseAvatar = ({
         style={size}
         {...otherProps}
       /> */}
-      <Avatar
-        // title={title}
-        source={
-          value && typeof value == "string"
-            ? {
-                uri: value
-              }
-            : value
-        }
-        // showEditButton
-        // onEditPress={onEditPress}
-        onPress={onEditPress}
-        size={size ? (size.height ? size.height : size) : "medium"}
-        style={[
-          size,
-          {
-            shadowColor: "#9b9b9b",
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.7,
-            shadowRadius: 2,
-            elevation: 1
-          },
-          style
-        ]}
-        {...otherProps}
-        // containerStyle={{marginBottom: 20}}
-      />
+
       {caption ? <Text style={captionStyle}>{caption}</Text> : null}
     </View>
   );
