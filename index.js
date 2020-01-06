@@ -1,2 +1,4 @@
 import DynamicForm from "./src";
-export { DynamicForm };
+module.exports = {
+  DynamicForm
+};
