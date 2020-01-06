@@ -22,20 +22,22 @@ const CheckboxField = ({ value, setValue, title, error, ...otherProps }: Checkbo
         status={error ? "danger" : value ? "success" : "basic"}
         {...otherProps}
       />
-      <Text
-        appearance="hint"
-        category="label"
-        status={error ? "danger" : value ? "success" : "basic"}
-        style={{
-          marginTop: 5,
-          fontWeight: "400",
-          fontSize: 12,
-          lineHeight: 16,
-          fontFamily: "System"
-        }}
-      >
-        {error}
-      </Text>
+      {error ? (
+        <Text
+          appearance="hint"
+          category="label"
+          status={error ? "danger" : value ? "success" : "basic"}
+          style={{
+            marginTop: 5,
+            fontWeight: "400",
+            fontSize: 12,
+            lineHeight: 16,
+            fontFamily: "System"
+          }}
+        >
+          {error}
+        </Text>
+      ) : null}
     </View>
   );
 };
