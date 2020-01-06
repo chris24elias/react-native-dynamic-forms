@@ -61,7 +61,7 @@ class PickerField extends PureComponent<PickerFieldProps> {
     };
     return (
       <View style={styles.fieldContainer}>
-        <Text style={textStyle}>{title}</Text>
+        {title ? <Text style={textStyle}>{title}</Text> : null}
         <Picker
           {...restProps}
           placeholder={placeholder}
