@@ -15,7 +15,8 @@ const TextField = ({
   returnKeyLabel,
   secure,
   multiline,
-  ref, // DONT USE
+  ref, // DONT USE,
+  formatText,
   ...otherProps
 }) => {
   const [secureTextEntry, setSecureTextEntry] = React.useState(secure);
@@ -31,7 +32,13 @@ const TextField = ({
       <Input
         placeholder={placeholder}
         value={value}
-        onChangeText={text => setValue(text)}
+        onChangeText={text => {
+          let txt = text;
+          if (formatText) {
+            txt = formatText(text);
+          }
+          setValue(txt);
+        }}
         style={{}}
         label={title}
         status={error ? "danger" : value ? "success" : "basic"}

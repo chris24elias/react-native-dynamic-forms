@@ -13,25 +13,26 @@ export interface Option {
 
 export interface Field {
   type:
-    | 'textField'
-    | 'selectField'
-    | 'checkboxField'
-    | 'toggleField'
-    | 'radioField'
-    | 'datePickerField'
-    | 'avatarField'
-    | 'tagsInputField'
-    | 'pickerField'
-    | 'multiSelectPickerField'
-    | 'autoCompleteAddressField'
-    | 'buttonGroupField'
-    | 'fieldSection';
+    | "textField"
+    | "selectField"
+    | "checkboxField"
+    | "toggleField"
+    | "radioField"
+    | "datePickerField"
+    | "avatarField"
+    | "tagsInputField"
+    | "pickerField"
+    | "multiSelectPickerField"
+    | "autoCompleteAddressField"
+    | "buttonGroupField"
+    | "fieldSection"
+    | "row";
   placeholder?: string;
   title: string;
   initialValue: any;
   options?: Option[];
   secure?: boolean;
-  fields?: {[x: string]: Field};
+  fields?: { [x: string]: Field };
 }
 
 // interface Option {

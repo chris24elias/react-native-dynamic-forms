@@ -17,6 +17,7 @@ import AutoCompleteAddressField from "./components/AutoCompleteAddressField";
 import styles from "./constants/styles";
 import { Field } from "./constants/interfaces";
 import ButtonGroupField from "./components/ButtonGroupField";
+import FieldSection from "./components/FieldSection";
 
 interface DynamicFormProps {
   form: { [x: string]: Field };
@@ -69,8 +70,17 @@ const DynamicForm = ({
     return renderFields(form, fields, props);
   }
 
-  function renderFields(form, fields, formikProps) {
-    const { values, errors, handleSubmit, setFieldValue } = formikProps;
+  function renderFields(form, fields, formikProps: FormikProps<any>) {
+    const {
+      values,
+      errors,
+      handleSubmit,
+      validateField,
+      setFieldValue,
+      handleBlur,
+      setFieldTouched,
+      touched
+    } = formikProps;
 
     return fields.map((key, index) => {
       const field = form[key];
@@ -78,18 +88,28 @@ const DynamicForm = ({
       allFieldsCount++;
       const { type, placeholder, title, options, initialValue, ...otherProps } = field;
 
+      const err = touched[name] && errors[name] ? errors[name] : undefined;
       const sharedFieldProps = {
         ...otherProps,
         key: index,
         value: values[name],
-        error: errors[name],
+        error: err,
         setValue: (value, shouldValidate) => {
           setFieldValue(name, value, shouldValidate);
+        },
+        onBlur: e => {
+          console.log("ON BLUR", name);
+          // setTimeout(() => {
+          //   validateField(name);
+          // }, 150);
+          setFieldTouched(name, true, true);
+          // validateField(name);
         },
         title: title,
         placeholder,
         data: options,
-        setFieldValue
+        setFieldValue,
+        status: err ? "danger" : values[name] && values[name] ? "success" : "basic"
       };
 
       if (type == "custom" && field.component) {
@@ -151,33 +171,11 @@ const DynamicForm = ({
       }
 
       if (type == "pickerField") {
-        return (
-          <PickerField
-            {...sharedFieldProps}
-            status={
-              sharedFieldProps.error
-                ? "danger"
-                : sharedFieldProps.value && sharedFieldProps.value
-                ? "success"
-                : "basic"
-            }
-          />
-        );
+        return <PickerField {...sharedFieldProps} />;
       }
 
       if (type == "multiSelectPickerField") {
-        return (
-          <MultiSelectPickerField
-            {...sharedFieldProps}
-            status={
-              sharedFieldProps.error
-                ? "danger"
-                : sharedFieldProps.value && sharedFieldProps.value.length
-                ? "success"
-                : "basic"
-            }
-          />
-        );
+        return <MultiSelectPickerField {...sharedFieldProps} />;
       }
 
       if (type == "autoCompleteAddressField") {
@@ -188,11 +186,19 @@ const DynamicForm = ({
         return <ButtonGroupField {...sharedFieldProps} />;
       }
 
-      if (type == "fieldSection") {
+      if (type == "row") {
         return (
           <View key={sharedFieldProps.key} style={{ flexDirection: "row" }}>
             {renderForm(field.fields, formikProps)}
           </View>
+        );
+      }
+
+      if (type == "fieldSection") {
+        return (
+          <FieldSection key={sharedFieldProps.key} {...sharedFieldProps}>
+            {renderForm(field.fields, formikProps)}
+          </FieldSection>
         );
       }
     });
@@ -253,7 +259,7 @@ const DynamicForm = ({
       if (initialValues[key] != undefined) {
         value = initialValues[key];
       }
-      if (type == "fieldSection") {
+      if (type == "fieldSection" || type == "row") {
         // do something
         getInitialValuesHelper(field.fields, initialValuesObj);
       } else {
@@ -289,6 +295,8 @@ const DynamicForm = ({
       validationSchema={schema}
       initialValues={getInitialValues(masterForm)}
       onSubmit={onsubmit}
+      validateOnChange={true}
+      validateOnBlur={true}
       {...formikProps}
     >
       {props => {

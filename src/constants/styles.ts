@@ -5,8 +5,11 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   fieldContainer: {
-    // flex: 1,
     marginBottom: 15,
+    flex: 1,
+    flexDirection: "column"
+  },
+  sectionContainer: {
     flex: 1,
     flexDirection: "column"
   },
