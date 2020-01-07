@@ -12,6 +12,8 @@ interface AutoCompleteAddressFieldProps extends FieldComponentProps {
   apiKey: string;
   style: any;
   themedStyle: any;
+  modalHeaderText: string;
+  doneButtonStyle: any;
 }
 class AutoCompleteAddressField extends PureComponent<AutoCompleteAddressFieldProps> {
   static styledComponentName = "Input";
@@ -55,6 +57,8 @@ class AutoCompleteAddressField extends PureComponent<AutoCompleteAddressFieldPro
       secure,
       onAddressPress,
       setFieldValue,
+      modalHeaderText = "Address",
+      doneButtonStyle,
       ...otherProps
     } = this.props;
 
@@ -118,7 +122,7 @@ class AutoCompleteAddressField extends PureComponent<AutoCompleteAddressFieldPro
                 </TouchableOpacity>
               </Left>
               <Body>
-                <Text>Address</Text>
+                <Text>{modalHeaderText}</Text>
               </Body>
               <Right></Right>
             </Header>
@@ -170,7 +174,9 @@ class AutoCompleteAddressField extends PureComponent<AutoCompleteAddressFieldPro
               // {...restProps}
             />
             <View style={{ padding: 15 }}>
-              <Button onPress={() => this.setState({ modalVisible: false })}>Done</Button>
+              <Button style={doneButtonStyle} onPress={() => this.setState({ modalVisible: false })}>
+                Done
+              </Button>
             </View>
           </View>
         </Modal>

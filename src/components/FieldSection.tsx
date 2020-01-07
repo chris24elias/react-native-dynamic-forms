@@ -17,14 +17,15 @@ const FieldSection = (props: FieldSectionProps) => {
       {props.title ? (
         <Text
           category="h6"
-          style={[{ fontWeight: "800", color: "#8F9BB3", fontFamily: "System" }, props.titleTextStyle]}
+          style={[
+            { fontWeight: "800", color: "#8F9BB3", fontFamily: "System", marginBottom: 15 },
+            props.titleTextStyle
+          ]}
         >
           {props.title}
         </Text>
       ) : null}
-      <View style={[{ paddingHorizontal: 15, paddingTop: 15 }, props.contentContainerStyle]}>
-        {props.children}
-      </View>
+      <View style={[{ paddingHorizontal: 15 }, props.contentContainerStyle]}>{props.children}</View>
     </View>
   );
 };

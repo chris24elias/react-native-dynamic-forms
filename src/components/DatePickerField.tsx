@@ -1,8 +1,8 @@
-import React from 'react';
-import {Datepicker, Icon, Text} from '@ui-kitten/components';
-import {View} from 'react-native';
-import styles from '../constants/styles';
-import {FieldComponentProps} from '../constants/interfaces';
+import React from "react";
+import { Datepicker, Icon, Text } from "@ui-kitten/components";
+import { View } from "react-native";
+import styles from "../constants/styles";
+import { FieldComponentProps } from "../constants/interfaces";
 
 interface DatePickerFieldProps extends FieldComponentProps {
   value: Date;
@@ -23,15 +23,17 @@ const DatePickerField = ({
 }: DatePickerFieldProps) => {
   return (
     <View style={styles.fieldContainer}>
-      <Text category="c2" style={[{marginBottom: 5}, titleStyle]}>
-        {title}
-      </Text>
+      {title ? (
+        <Text category="c2" style={[{ marginBottom: 5 }, titleStyle]}>
+          {title}
+        </Text>
+      ) : null}
       <Datepicker
         placeholder="Pick Date"
         date={value}
         onSelect={setValue}
         // icon={CalendarIcon}
-        status={error ? 'danger' : value ? 'success' : 'basic'}
+        status={error ? "danger" : value ? "success" : "basic"}
         {...otherProps}
       />
     </View>

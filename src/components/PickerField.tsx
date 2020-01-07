@@ -11,13 +11,15 @@ interface PickerFieldProps extends FieldComponentProps {
   data: Option[];
   style: any;
   themedStyle: any;
+  iosIcon?: any;
+  titleStyle?: any;
 }
 
 class PickerField extends PureComponent<PickerFieldProps> {
   static styledComponentName = "Input";
 
   render() {
-    const { placeholder, error, value, setValue, title, data } = this.props;
+    const { placeholder, error, value, setValue, title, data, iosIcon, titleStyle, errorStyle } = this.props;
     const { style, themedStyle, ...restProps } = this.props;
     const {
       labelMarginBottom,
@@ -61,11 +63,11 @@ class PickerField extends PureComponent<PickerFieldProps> {
     };
     return (
       <View style={styles.fieldContainer}>
-        {title ? <Text style={textStyle}>{title}</Text> : null}
+        {title ? <Text style={[textStyle, titleStyle]}>{title}</Text> : null}
         <Picker
           {...restProps}
           placeholder={placeholder}
-          iosIcon={<Icon name="md-arrow-dropdown" />}
+          iosIcon={iosIcon ? iosIcon : <Icon name="md-arrow-dropdown" />}
           mode="dropdown"
           textStyle={normalizeTextStyle(themedStyle, style)}
           selectedValue={value}
@@ -77,7 +79,11 @@ class PickerField extends PureComponent<PickerFieldProps> {
             <Picker.Item label={s.label} key={i} value={s.value} />
           ))}
         </Picker>
-        {error && <Text style={captionStyle}>{error}</Text>}
+        {error && (
+          <Text status={error ? "danger" : value ? "success" : "basic"} style={[captionStyle, errorStyle]}>
+            {error}
+          </Text>
+        )}
       </View>
     );
   }

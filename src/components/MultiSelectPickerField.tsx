@@ -12,12 +12,14 @@ interface MultiSelectPickerFieldProps extends FieldComponentProps {
   data: Option[];
   style: any;
   themedStyle: any;
+  errorTextStyle: any;
+  headerTitleStyle: any;
 }
 class MultiSelectPickerField extends PureComponent<MultiSelectPickerFieldProps> {
   static styledComponentName = "Input";
 
   render() {
-    const { error, setValue, title, value, placeholder, data } = this.props;
+    const { error, setValue, title, value, placeholder, data, errorTextStyle, headerTitleStyle } = this.props;
     const { style, themedStyle, ...restProps } = this.props;
     const {
       labelMarginBottom,
@@ -87,7 +89,7 @@ class MultiSelectPickerField extends PureComponent<MultiSelectPickerFieldProps> 
             <Header>
               <Left />
               <Body style={{ flex: 3 }}>
-                <Title>{title}</Title>
+                <Title style={headerTitleStyle}>{title}</Title>
               </Body>
               <Right></Right>
             </Header>
@@ -133,7 +135,14 @@ class MultiSelectPickerField extends PureComponent<MultiSelectPickerFieldProps> 
           }
           {...restProps}
         />
-        {error && <Text style={captionStyle}>{error}</Text>}
+        {error && (
+          <Text
+            status={error ? "danger" : value ? "success" : "basic"}
+            style={[captionStyle, errorTextStyle]}
+          >
+            {error}
+          </Text>
+        )}
       </View>
     );
   }
