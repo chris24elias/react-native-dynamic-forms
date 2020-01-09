@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { View, Platform } from "react-native";
 import { Input, Icon } from "@ui-kitten/components";
 import styles from "../constants/styles";
 
@@ -41,6 +41,7 @@ const TextField = ({
         }}
         style={{}}
         label={title}
+        size={Platform.OS == "ios" ? "medium" : "small"}
         status={error ? "danger" : value ? "success" : "basic"}
         caption={error}
         ref={getRef}
