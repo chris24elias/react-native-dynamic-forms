@@ -14,12 +14,23 @@ interface MultiSelectPickerFieldProps extends FieldComponentProps {
   themedStyle: any;
   errorTextStyle: any;
   headerTitleStyle: any;
+  submitButtonStyle: any;
 }
 class MultiSelectPickerField extends PureComponent<MultiSelectPickerFieldProps> {
   static styledComponentName = "Input";
 
   render() {
-    const { error, setValue, title, value, placeholder, data, errorTextStyle, headerTitleStyle } = this.props;
+    const {
+      error,
+      setValue,
+      title,
+      value,
+      placeholder,
+      data,
+      errorTextStyle,
+      headerTitleStyle,
+      submitButtonStyle
+    } = this.props;
     const { style, themedStyle, ...restProps } = this.props;
     const {
       labelMarginBottom,
@@ -117,7 +128,9 @@ class MultiSelectPickerField extends PureComponent<MultiSelectPickerFieldProps> 
               width: "90%",
               borderRadius: 10,
               alignSelf: "center",
-              marginTop: 25
+              marginTop: 25,
+              backgroundColor: themedStyle.borderColor,
+              ...submitButtonStyle
             },
             selectToggle: {
               marginBottom: 5,
