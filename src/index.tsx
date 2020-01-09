@@ -66,8 +66,13 @@ const DynamicForm = ({
       return null;
     }
 
-    let fields = Object.keys(form);
-    return renderFields(form, fields, props);
+    let master = form;
+    if (typeof form == "function") {
+      master = form(props);
+    }
+
+    let fields = Object.keys(master);
+    return renderFields(master, fields, props);
   }
 
   function renderFields(form, fields, formikProps: FormikProps<any>) {
