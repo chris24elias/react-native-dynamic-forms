@@ -34,7 +34,7 @@ interface DynamicFormProps {
   submitButtonText?: string;
   renderSubmitButton?: (isValid: boolean, handleSubmit: any) => any;
   renderHeader?: (props: FormikProps<any>) => any;
-  initialValues?: any;
+  initialValues: any;
   onFormUpdate: (props: FormikProps<any>) => any;
 }
 
@@ -293,7 +293,8 @@ const DynamicForm = ({
   return (
     <Formik
       validationSchema={schema}
-      initialValues={getInitialValues(masterForm)}
+      // initialValues={getInitialValues(masterForm)}
+      initialValues={initialValues}
       onSubmit={onsubmit}
       validateOnChange={true}
       validateOnBlur={true}
