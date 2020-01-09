@@ -37,6 +37,74 @@ const App = () => (
 export default App;
 ```
 
+## Usage
+
+```
+import DynamicForm from '..';
+import * as yup from 'yup';
+
+const loginForm = {
+  email: {
+    type: 'textField',
+    placeholder: 'email',
+    title: 'Email',
+    initialValue: '',
+    keyboardType: 'email-address',
+  },
+  password: {
+    type: 'textField',
+    placeholder: 'password',
+    title: 'Password',
+    initialValue: '',
+    secure: true,
+  },
+
+  checkbox: {
+    type: 'checkboxField',
+    placeholder: 'check',
+    title: 'I agree with Terms & Conditions',
+    initialValue: false,
+    style: {},
+    textStyle: {},
+  },
+};
+
+const schema = yup.object({
+  email: yup
+    .string()
+    .email()
+    .required(),
+  password: yup.string().required(),
+  checkbox: yup
+    .bool()
+    .oneOf([true], 'You must agree with terms and conditions'),
+});
+
+const Login = ({}: LoginProps) => {
+  return (
+    <SafeAreaView style={{flex: 1}}>
+      <DynamicForm
+        form={loginForm}
+        schema={schema}
+        onSubmit={(values, fomikProps) => {
+          console.log('VALUES', values);
+          login(values.email, values.password, values.checkbox).then(() => {
+
+          }).catch(e => {
+            fomikProps.setError()
+          })
+        }}
+        submitButtonText="Login"
+      />
+    </SafeAreaView>
+  );
+};
+
+export default Login;
+
+
+```
+
 ## TextField
 
 ```
