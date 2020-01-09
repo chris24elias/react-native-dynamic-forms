@@ -28,6 +28,7 @@ interface ChooseAvatarProps {
   caption: string;
   style: any;
   renderComponent: any;
+  containerStyle: any;
 }
 
 const ChooseAvatar = ({
@@ -40,6 +41,7 @@ const ChooseAvatar = ({
   caption,
   captionStyle,
   renderComponent,
+  containerStyle,
   ...otherProps
 }: ChooseAvatarProps) => {
   function onEditPress() {
@@ -74,13 +76,13 @@ const ChooseAvatar = ({
     <View style={[styles.fieldContainer, getPosition()]}>
       <TouchableOpacity
         onPress={onEditPress}
-        style={{
+        style={[{
           shadowColor: "#9b9b9b",
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.7,
           shadowRadius: 2,
           elevation: 1
-        }}
+        }, containerStyle}
       >
         {renderComponent ? (
           renderComponent(value)
