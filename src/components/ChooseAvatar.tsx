@@ -76,13 +76,16 @@ const ChooseAvatar = ({
     <View style={[styles.fieldContainer, getPosition()]}>
       <TouchableOpacity
         onPress={onEditPress}
-        style={[{
-          shadowColor: "#9b9b9b",
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.7,
-          shadowRadius: 2,
-          elevation: 1
-        }, containerStyle}
+        style={[
+          {
+            shadowColor: "#9b9b9b",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.7,
+            shadowRadius: 2,
+            elevation: 1
+          },
+          containerStyle
+        ]}
       >
         {renderComponent ? (
           renderComponent(value)
