@@ -1,10 +1,10 @@
 import React, { Component, useState } from "react";
-import { View, Alert, StyleSheet, Text, TouchableOpacity, Platform } from "react-native";
+import { View, Alert, StyleSheet, Text, TouchableOpacity, Platform, Image } from "react-native";
 import ImagePicker from "react-native-image-picker";
 import CameraRoll, { saveToCameraRoll } from "@react-native-community/cameraroll";
 // import {request, PERMISSIONS} from 'react-native-permissions';
 import styles from "../constants/styles";
-import { Avatar, Image } from "react-native-elements";
+// import { Avatar, Image } from "react-native-elements";
 import { styled } from "@ui-kitten/components";
 
 const options = {
@@ -90,7 +90,7 @@ const ChooseAvatar = ({
         {renderComponent ? (
           renderComponent(value)
         ) : (
-          <Avatar
+          <Image
             source={
               value && typeof value == "string"
                 ? {
