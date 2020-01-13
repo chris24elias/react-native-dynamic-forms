@@ -110,6 +110,7 @@ const DynamicForm = ({
         data: options,
         setFieldValue,
         status: err ? "danger" : values[name] && values[name] ? "success" : "basic"
+        // size: Platform.OS == "ios" ? "medium" : "small"
       };
 
       if (type == "custom" && field.component) {
@@ -171,19 +172,15 @@ const DynamicForm = ({
       }
 
       if (type == "pickerField") {
-        return <PickerField {...sharedFieldProps} size={Platform.OS == "ios" ? "medium" : "small"} />;
+        return <PickerField {...sharedFieldProps} />;
       }
 
       if (type == "multiSelectPickerField") {
-        return (
-          <MultiSelectPickerField {...sharedFieldProps} size={Platform.OS == "ios" ? "medium" : "small"} />
-        );
+        return <MultiSelectPickerField {...sharedFieldProps} />;
       }
 
       if (type == "autoCompleteAddressField") {
-        return (
-          <AutoCompleteAddressField {...sharedFieldProps} size={Platform.OS == "ios" ? "medium" : "small"} />
-        );
+        return <AutoCompleteAddressField {...sharedFieldProps} />;
       }
 
       if (type == "buttonGroupField") {

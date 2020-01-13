@@ -41,7 +41,6 @@ const TextField = ({
         }}
         style={{}}
         label={title}
-        size={Platform.OS == "ios" ? "medium" : "small"}
         status={error ? "danger" : value ? "success" : "basic"}
         caption={error}
         ref={getRef}
