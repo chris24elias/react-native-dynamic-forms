@@ -4,16 +4,26 @@ import styles from "../constants/styles";
 import { View } from "react-native";
 
 const SelectField = ({ data, value, setValue, title, placeholder, error, multiSelect, ...otherProps }) => {
+  function getLabelForValue(value) {
+    let label = "";
+    data.forEach(element => {
+      if (element.value == value) {
+        label = element.text;
+      }
+    });
+    return label;
+  }
+
   return (
     <View style={styles.fieldContainer}>
       <Select
         data={data}
-        selectedOption={value ? { text: value } : null}
+        selectedOption={value ? { text: getLabelForValue(value) } : null}
         onSelect={val => {
           if (multiSelect) {
             setValue(val);
           } else {
-            setValue(val.text);
+            setValue(val.value ? val.value : val.text);
           }
         }}
         placeholder={placeholder}

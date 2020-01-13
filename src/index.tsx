@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Fragment } from "react";
-import { View, Keyboard } from "react-native";
+import { View, Keyboard, Platform } from "react-native";
 import { Layout, Button, Text } from "@ui-kitten/components";
 import { Formik, FormikProps } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -171,15 +171,19 @@ const DynamicForm = ({
       }
 
       if (type == "pickerField") {
-        return <PickerField {...sharedFieldProps} />;
+        return <PickerField {...sharedFieldProps} size={Platform.OS == "ios" ? "medium" : "small"} />;
       }
 
       if (type == "multiSelectPickerField") {
-        return <MultiSelectPickerField {...sharedFieldProps} />;
+        return (
+          <MultiSelectPickerField {...sharedFieldProps} size={Platform.OS == "ios" ? "medium" : "small"} />
+        );
       }
 
       if (type == "autoCompleteAddressField") {
-        return <AutoCompleteAddressField {...sharedFieldProps} />;
+        return (
+          <AutoCompleteAddressField {...sharedFieldProps} size={Platform.OS == "ios" ? "medium" : "small"} />
+        );
       }
 
       if (type == "buttonGroupField") {

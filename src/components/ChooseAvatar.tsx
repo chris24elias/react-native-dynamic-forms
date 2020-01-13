@@ -7,12 +7,13 @@ import styles from "../constants/styles";
 // import { Avatar, Image } from "react-native-elements";
 import { styled } from "@ui-kitten/components";
 
-const options = {
+const defaultOptions = {
   title: "Choose Photo",
   // customButtons: [{name: 'fb', title: 'Choose Photo from Facebook'}],
   storageOptions: {
     skipBackup: true,
-    path: "images"
+    path: "images",
+    cameraRoll: true
   },
   // tintColor: 'white',
   allowsEditing: true
@@ -29,6 +30,7 @@ interface ChooseAvatarProps {
   style: any;
   renderComponent: any;
   containerStyle: any;
+  imagePickerOptions: any;
 }
 
 const ChooseAvatar = ({
@@ -42,10 +44,11 @@ const ChooseAvatar = ({
   captionStyle,
   renderComponent,
   containerStyle,
+  imagePickerOptions,
   ...otherProps
 }: ChooseAvatarProps) => {
   function onEditPress() {
-    ImagePicker.showImagePicker(options, response => {
+    ImagePicker.showImagePicker(Object.assign(defaultOptions, imagePickerOptions), response => {
       console.log("Response = ", response);
 
       if (response.didCancel) {

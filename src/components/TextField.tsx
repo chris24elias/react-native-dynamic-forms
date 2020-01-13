@@ -62,6 +62,7 @@ const TextField = ({
         icon={secure ? renderIcon : null}
         onIconPress={onIconPress}
         multiline={multiline}
+        autoCapitalize={secure ? "none" : "sentences"}
         {...otherProps}
       />
     </View>
