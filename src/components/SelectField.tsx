@@ -5,20 +5,25 @@ import { View } from "react-native";
 
 const SelectField = ({ data, value, setValue, title, placeholder, error, multiSelect, ...otherProps }) => {
   function getLabelForValue(value) {
-    let label = "";
+    let label = null;
     data.forEach(element => {
       if (element.value == value) {
         label = element.text;
       }
     });
-    return label;
+
+    if (label) {
+      return { text: label };
+    }
+
+    return null;
   }
 
   return (
     <View style={styles.fieldContainer}>
       <Select
         data={data}
-        selectedOption={value ? { text: getLabelForValue(value) } : null}
+        selectedOption={value ? getLabelForValue(value) : null}
         onSelect={val => {
           if (multiSelect) {
             setValue(val);
